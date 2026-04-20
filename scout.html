@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>COURTSIDE · SCOUT — AI Player Intelligence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="style.css">
+<style>
+:root {
+  --mode-accent:   var(--scout-accent);
+  --mode-primary:  var(--scout-primary);
+  --mode-border:   var(--scout-border);
+  --mode-subtle:   var(--scout-subtle);
+}
+
+/* ─── UPGRADE BUTTON ─── */
+.upgrade-btn {
+  padding: 7px 16px; border-radius: 5px;
+  font-family: 'Bebas Neue', sans-serif; font-size: 14px; letter-spacing: .5px;
+  background: var(--scout-accent); color: #000; border: none;
+  cursor: pointer; text-decoration: none;
+  display: flex; align-items: center; gap: 6px;
+  animation: border-pulse-scout 2.5s ease-in-out infinite;
+  transition: opacity .15s;
+}
+.upgrade-btn:hover { opacity: .88; }
+
+/* ─── TOP PROSPECT CARD ─── */
+.prospect-card {
+  background: linear-gradient(135deg, #021a0e, #053d22, #0a2212);
+  background-size: 200% 200%;
+  animation: gradient-drift 8s ease infinite;
+  border: 1px solid var(--scout-border);
+  border-radius: 8px; padding: 28px 32px;
+  display: grid; grid-template-columns: 1fr auto;
+  gap: 24px; align-items: center;
+  margin-bottom: 16px; position: relative; overflow: hidden;
+}
+.prospect-card::before {
+  content: '★';
+  position: absolute; right: 32px; top: 50%; transform: translateY(-50%);
+  font-size: 200px; color: rgba(0,255,135,0.03);
+  pointer-events: none; line-height: 1;
+}
+.prospect-label {
+  font-size: 10px; font-weight: 700; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--scout-accent);
+  display: flex; align-items: center; gap: 6px; margin-bottom: 8px;
+}
+.prospect-name {
+  font-family: 'Bebas Neue', sans-serif; font-size: 56px;
+  color: var(--courtside-white); letter-spacing: 1px; line-height: 1;
+  margin-bottom: 5px;
+}
+.prospect-sub { font-size: 13px; color: rgba(255,255,255,0.5); margin-bottom: 14px; }
+.prospect-badges { display: flex; gap: 8px; flex-wrap: wrap; }
+.prospect-badge {
+  padding: 4px 12px; border-radius: 4px; font-size: 11px; font-weight: 700;
+  background: var(--scout-subtle); border: 1px solid var(--scout-border);
+  color: var(--scout-accent);
+}
+.prospect-badge-neutral {
+  padding: 4px 12px; border-radius: 4px; font-size: 11px; font-weight: 700;
+  background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.65);
+}
+.prospect-right { text-align: center; }
+.prospect-view-btn {
+  margin-top: 12px;
+  padding: 8px 18px; border-radius: 6px;
+  background: var(--scout-accent); color: #000;
+  font-size: 12px; font-weight: 700; border: none; cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  transition: opacity .15s;
+}
+.prospect-view-btn:hover { opacity: .88; }
+
+/* ─── STAT STRIP ─── */
+.stat-strip {
+  display: grid; grid-template-columns: repeat(4,1fr); gap: 12px;
+  margin-bottom: 16px;
+}
+.stat-tile {
+  background: var(--surface-1);
+  border: 1px solid var(--border-subtle);
+  border-left: 3px solid var(--scout-border);
+  border-radius: 6px; padding: 16px 18px;
+  transition: border-left-color .15s;
+}
+.stat-tile:hover { border-left-color: var(--scout-accent); }
+.stat-tile-num {
+  font-family: 'Bebas Neue', sans-serif; font-size: 48px;
+  color: var(--scout-accent); letter-spacing: 1px; line-height: 1;
+}
+.stat-tile-lbl {
+  font-size: 10px; font-weight: 700; letter-spacing: .08em;
+  text-transform: uppercase; color: var(--text-muted); margin-top: 3px;
+}
+
+/* ─── DASHBOARD GRID ─── */
+.dash-grid {
+  display: grid; grid-template-columns: 1fr 260px; gap: 12px;
+  margin-bottom: 16px;
+}
+
+/* ─── QUICK ACTIONS ─── */
+.quick-actions-wrap {
+  display: flex; flex-direction: column; gap: 8px;
+}
+.qa-label {
+  font-size: 10px; font-weight: 700; letter-spacing: .08em;
+  text-transform: uppercase; color: var(--text-muted); margin-bottom: 2px;
+}
+.qa-btn {
+  width: 100%; padding: 13px 16px; border-radius: 6px;
+  background: var(--surface-2);
+  border: 1px solid var(--border-subtle);
+  font-size: 13px; font-weight: 600; color: var(--text-primary);
+  cursor: pointer; font-family: 'DM Sans', sans-serif;
+  text-align: left; display: flex; align-items: center; gap: 10px;
+  transition: background .15s, border-color .15s;
+}
+.qa-btn:hover {
+  background: var(--scout-subtle);
+  border-color: var(--scout-border);
+}
+.qa-btn svg { flex-shrink: 0; }
+
+/* ─── RECENT ACTIVITY ─── */
+.activity-card {
+  background: var(--surface-1);
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px; padding: 14px 16px; margin-bottom: 16px;
+}
+.activity-row {
+  display: flex; align-items: center; gap: 12px;
+  padding: 9px 0; border-bottom: 1px solid var(--border-subtle);
+}
+.activity-row:last-child { border-bottom: none; }
+.activity-dot {
+  width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0;
+}
+.activity-text { flex: 1; font-size: 12px; color: var(--text-secondary); }
+.activity-text b { color: var(--text-primary); }
+.activity-time { font-size: 11px; color: var(--text-muted); white-space: nowrap; }
+
+/* ─── RANKINGS TABLE ─── */
+.rankings-card {
+  background: var(--surface-1);
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px; padding: 14px 16px; margin-bottom: 16px;
+}
+.rank-row {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 0; border-bottom: 1px solid var(--border-subtle);
+}
+.rank-row:last-child { border-bottom: none; }
+.rank-num {
+  font-family: 'Bebas Neue', sans-serif; font-size: 18px;
+  color: var(--text-muted); width: 20px; text-align: center; flex-shrink: 0;
+}
+.rank-name { font-size: 13px; font-weight: 600; color: var(--text-primary); flex: 1; }
+.rank-school { font-size: 11px; color: var(--text-muted); }
+.rank-ppg {
+  font-family: 'Bebas Neue', sans-serif; font-size: 18px;
+  color: var(--scout-accent); letter-spacing: .5px;
+}
+.rank-ppg-lbl { font-size: 9px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; }
+.move-badge {
+  font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 3px;
+  width: 36px; text-align: center;
+}
+.move-up   { background: rgba(0,255,135,0.12); color: var(--scout-accent); }
+.move-down { background: rgba(239,68,68,0.12);  color: #F87171; }
+.move-flat { background: rgba(255,255,255,0.06); color: var(--text-muted); }
+
+/* ─── PLAYER GRID (reports) ─── */
+.player-grid-dark {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px;
+}
+.player-card-dark {
+  background: var(--surface-1);
+  border: 1px solid var(--border-subtle);
+  border-radius: 7px; overflow: hidden; cursor: pointer;
+  transition: transform .18s, box-shadow .18s;
+}
+.player-card-dark:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+.player-card-head {
+  padding: 16px 16px 12px;
+  display: flex; align-items: center; gap: 12px;
+}
+.player-card-info { flex: 1; }
+.player-card-name { font-family: 'Bebas Neue', sans-serif; font-size: 22px; color: var(--text-primary); letter-spacing: .5px; }
+.player-card-sub { font-size: 11px; color: var(--text-secondary); margin-top: 1px; }
+.player-card-rating {
+  font-family: 'Bebas Neue', sans-serif; font-size: 28px;
+  color: var(--scout-accent); letter-spacing: .5px;
+}
+.player-card-rating-lbl { font-size: 9px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; text-align: right; }
+.player-stats-row {
+  display: flex; padding: 10px 16px;
+  border-top: 1px solid var(--border-subtle);
+  border-bottom: 1px solid var(--border-subtle);
+  gap: 0;
+}
+.player-stat {
+  flex: 1; text-align: center; padding: 0 4px;
+  border-right: 1px solid var(--border-subtle);
+}
+.player-stat:last-child { border-right: none; }
+.player-stat-num { font-family: 'Bebas Neue', sans-serif; font-size: 20px; color: var(--scout-accent); }
+.player-stat-lbl { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--text-muted); margin-top: 1px; }
+.player-card-foot {
+  padding: 10px 16px;
+  display: flex; align-items: center; gap: 8px;
+}
+.player-card-btn {
+  margin-left: auto; padding: 5px 13px;
+  background: var(--scout-subtle); border: 1px solid var(--scout-border);
+  color: var(--scout-accent); border-radius: 4px;
+  font-size: 11px; font-weight: 700; cursor: pointer;
+  font-family: 'DM Sans', sans-serif; transition: background .15s;
+}
+.player-card-btn:hover { background: var(--scout-primary); color: #000; }
+
+/* ─── REPORT MODAL (expanded) ─── */
+.report-modal-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.88);
+  backdrop-filter: blur(6px); z-index: 700;
+  display: none; align-items: center; justify-content: center; padding: 20px;
+}
+.report-modal-overlay.active { display: flex; }
+.report-modal {
+  background: var(--surface-2);
+  border: 1px solid var(--border-subtle);
+  border-radius: 10px; width: 100%; max-width: 640px;
+  max-height: 90vh; overflow-y: auto;
+}
+.report-modal-head {
+  padding: 24px 24px 20px;
+  background: linear-gradient(135deg, #021a0e, #053d22);
+  border-bottom: 1px solid var(--border-subtle);
+  display: flex; align-items: center; gap: 16px;
+}
+.report-modal-info { flex: 1; }
+.report-modal-name { font-family: 'Bebas Neue', sans-serif; font-size: 32px; color: var(--courtside-white); letter-spacing: .5px; }
+.report-modal-sub { font-size: 12px; color: rgba(255,255,255,0.5); margin-top: 2px; }
+.report-close {
+  position: absolute; top: 14px; right: 14px;
+  background: rgba(0,0,0,0.4); border: 1px solid var(--border-subtle);
+  color: var(--text-secondary); width: 28px; height: 28px;
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  cursor: pointer; font-size: 14px;
+}
+.report-modal-body { padding: 20px 24px; }
+.report-section { margin-bottom: 18px; }
+.report-section-title {
+  font-size: 10px; font-weight: 700; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--scout-accent); margin-bottom: 10px;
+}
+.report-verdict { font-size: 13px; color: var(--text-secondary); line-height: 1.65; }
+.tendency-pill {
+  display: inline-block; padding: 4px 10px; border-radius: 4px;
+  background: rgba(0,255,135,0.08); border: 1px solid var(--scout-border);
+  font-size: 11px; color: var(--scout-accent); font-weight: 600; margin: 3px;
+}
+
+/* ─── REEL BUILDER ─── */
+.reel-builder-wrap {
+  background: var(--surface-1);
+  border: 1px solid var(--border-subtle); border-radius: 8px;
+  padding: 20px; margin-bottom: 16px;
+}
+.reel-input-row { display: flex; gap: 10px; margin-bottom: 12px; }
+.reel-input {
+  flex: 1; padding: 11px 16px; border-radius: 6px;
+  background: var(--surface-3); border: 1px solid var(--border-subtle);
+  color: var(--text-primary); font-size: 13px; font-family: 'DM Sans', sans-serif;
+  outline: none; transition: border-color .15s;
+}
+.reel-input:focus { border-color: var(--scout-border); }
+.reel-build-btn {
+  padding: 11px 20px; border-radius: 6px;
+  background: var(--scout-primary); color: #fff;
+  font-size: 13px; font-weight: 700; border: none; cursor: pointer;
+  font-family: 'DM Sans', sans-serif; display: flex; align-items: center; gap: 7px;
+  white-space: nowrap; transition: opacity .15s;
+}
+.reel-build-btn:hover { opacity: .88; }
+.reel-chips { display: flex; flex-wrap: wrap; gap: 7px; }
+.reel-chip {
+  padding: 5px 12px; border-radius: 4px;
+  background: var(--surface-3); border: 1px solid var(--border-subtle);
+  font-size: 11px; color: var(--text-secondary); cursor: pointer;
+  transition: all .12s;
+}
+.reel-chip:hover { background: var(--scout-subtle); border-color: var(--scout-border); color: var(--scout-accent); }
+
+.reel-result-wrap {
+  background: var(--surface-1);
+  border: 1px solid var(--border-subtle); border-radius: 8px;
+  overflow: hidden; margin-bottom: 16px;
+}
+.reel-result-hdr {
+  padding: 12px 16px; border-bottom: 1px solid var(--border-subtle);
+  display: flex; align-items: center; gap: 10px;
+}
+.reel-result-title { font-family: 'Bebas Neue', sans-serif; font-size: 20px; color: var(--text-primary); flex: 1; }
+.reel-result-meta { font-size: 11px; color: var(--text-muted); }
+.reel-player-dark {
+  height: 220px; position: relative; cursor: pointer;
+  background: linear-gradient(135deg, #022C22, #065F46, #0A1A0F);
+  display: flex; align-items: center; justify-content: center;
+}
+.reel-play-circle {
+  width: 56px; height: 56px; border-radius: 50%;
+  background: rgba(255,255,255,0.12); border: 2px solid rgba(255,255,255,0.3);
+  display: flex; align-items: center; justify-content: center;
+  transition: background .15s, transform .15s;
+}
+.reel-player-dark:hover .reel-play-circle { background: var(--scout-primary); transform: scale(1.08); }
+.reel-timeline-dark {
+  display: flex; padding: 10px 12px; gap: 6px; overflow-x: auto; border-top: 1px solid var(--border-subtle);
+}
+.reel-clip {
+  flex-shrink: 0; background: var(--surface-3);
+  border: 1px solid var(--border-subtle); border-radius: 4px;
+  padding: 6px 10px; text-align: center; cursor: pointer;
+  transition: border-color .12s;
+}
+.reel-clip:hover { border-color: var(--scout-border); }
+.reel-clip-label { font-family: 'Bebas Neue', sans-serif; font-size: 12px; color: var(--scout-accent); }
+.reel-clip-game { font-size: 10px; color: var(--text-muted); }
+.reel-actions-dark {
+  display: flex; gap: 8px; padding: 12px 16px; border-top: 1px solid var(--border-subtle);
+}
+.reel-action-dark {
+  padding: 8px 14px; border-radius: 5px;
+  background: var(--surface-3); border: 1px solid var(--border-subtle);
+  color: var(--text-secondary); font-size: 12px; font-weight: 600;
+  cursor: pointer; font-family: 'DM Sans', sans-serif;
+  display: flex; align-items: center; gap: 6px; transition: all .12s;
+}
+.reel-action-dark:hover { background: var(--scout-subtle); border-color: var(--scout-border); color: var(--scout-accent); }
+
+.saved-reels-grid {
+  display: grid; grid-template-columns: repeat(3,1fr); gap: 12px;
+}
+.saved-reel-card {
+  background: var(--surface-1); border: 1px solid var(--border-subtle);
+  border-radius: 6px; overflow: hidden; cursor: pointer;
+  transition: transform .15s;
+}
+.saved-reel-card:hover { transform: translateY(-2px); }
+.saved-reel-thumb {
+  height: 72px; display: flex; align-items: center; justify-content: center;
+  position: relative;
+}
+.saved-reel-tag {
+  position: absolute; top: 7px; left: 8px;
+  font-size: 9px; font-weight: 700; letter-spacing: .08em;
+  background: rgba(0,0,0,0.6); color: #fff;
+  padding: 2px 6px; border-radius: 3px;
+}
+.saved-reel-body { padding: 10px 12px; }
+.saved-reel-title { font-size: 12px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px; }
+.saved-reel-meta { font-size: 11px; color: var(--text-muted); }
+
+/* ─── PLAYER SEARCH ─── */
+.search-bar-row {
+  display: flex; gap: 10px; margin-bottom: 16px;
+}
+.search-input-dark {
+  flex: 1; padding: 11px 16px; border-radius: 6px;
+  background: var(--surface-2); border: 1px solid var(--border-subtle);
+  color: var(--text-primary); font-size: 13px; font-family: 'DM Sans', sans-serif;
+  outline: none; transition: border-color .15s;
+}
+.search-input-dark:focus { border-color: var(--scout-border); }
+.search-filter {
+  padding: 0 12px; border-radius: 6px;
+  background: var(--surface-2); border: 1px solid var(--border-subtle);
+  color: var(--text-secondary); font-size: 12px; font-family: 'DM Sans', sans-serif;
+  cursor: pointer; outline: none;
+}
+.search-results-dark {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 10px;
+}
+
+/* ─── MOBILE ─── */
+@media (max-width: 768px) {
+  .stat-strip { grid-template-columns: repeat(2,1fr); }
+  .dash-grid { grid-template-columns: 1fr; }
+  .prospect-name { font-size: 38px; }
+  .saved-reels-grid { grid-template-columns: 1fr 1fr; }
+  .player-grid-dark { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="cs-nav">
+  <div class="cs-nav-inner">
+    <a href="courtside.html" class="cs-brand">COURTSIDE<span class="sep">·</span><span class="mode">SCOUT</span></a>
+    <div class="cs-nav-tabs">
+      <button class="cs-nav-tab active" id="htab-home" onclick="switchTool('home',this)">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        Home
+      </button>
+      <button class="cs-nav-tab" id="htab-reports" onclick="switchTool('reports',this)">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+        Player Reports
+      </button>
+      <button class="cs-nav-tab" id="htab-reel" onclick="switchTool('reel',this)">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+        Reel Builder
+      </button>
+      <button class="cs-nav-tab" id="htab-search" onclick="switchTool('search',this)">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        Player Search
+      </button>
+    </div>
+    <div class="cs-nav-right">
+      <a href="film.html" target="_blank" class="eco-bridge">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/></svg>
+        Courtside Film
+      </a>
+      <span class="eco-status-scout">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+        Scout Active
+      </span>
+    </div>
+  </div>
+</nav>
+
+<!-- TICKER -->
+<div class="cs-ticker">
+  <div class="ticker-label"><span class="pulse-dot" style="background:#22C55E;margin-right:4px;"></span>LIVE</div>
+  <div class="ticker-scroll">
+    <div class="ticker-track" id="scout-ticker"></div>
+  </div>
+</div>
+
+<!-- PAYWALL -->
+<div class="paywall-overlay" id="paywall" style="display:none;">
+  <div class="paywall-modal">
+    <div class="paywall-hero">
+      <div class="paywall-icon">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      </div>
+      <div style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--scout-accent);margin-bottom:8px;">Courtside Scout</div>
+      <div class="paywall-title">Find Players.<br>Build Reels.</div>
+      <div class="paywall-sub">AI-powered scouting reports on every indexed player in the Auckland division — plus custom highlight reels built from filmed footage on demand.</div>
+    </div>
+    <div class="paywall-features">
+      <div class="pw-feat">
+        <div class="pw-feat-icon" style="background:var(--scout-subtle);">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--scout-accent)" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+        </div>
+        <div><div class="pw-feat-title">AI Player Scouting Reports</div><div class="pw-feat-desc">Instant AI-generated reports on every indexed player — rating, defensive grade, comparable player, tendencies, projection.</div></div>
+      </div>
+      <div class="pw-feat">
+        <div class="pw-feat-icon" style="background:rgba(245,158,11,0.12);">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+        </div>
+        <div><div class="pw-feat-title">AI Reel Builder</div><div class="pw-feat-desc">Request any player's highlight reel in plain English — "Ngata's best defensive plays of 2026" — built from footage in minutes.</div></div>
+      </div>
+      <div class="pw-feat">
+        <div class="pw-feat-icon" style="background:rgba(96,165,250,0.12);">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#60A5FA" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        </div>
+        <div><div class="pw-feat-title">Player Discovery & Search</div><div class="pw-feat-desc">Search the full Auckland player database by school, position, stats, and potential grade.</div></div>
+      </div>
+    </div>
+    <div class="paywall-cta">
+      <div class="paywall-price"><div class="price-amount">$9</div><div class="price-per">/ month NZD</div></div>
+      <div class="price-note">Bundle with Playbook for $19/mo — save $5</div>
+      <button class="paywall-buy-btn" onclick="unlockScout()">Start Scouting — $9/mo</button>
+      <span class="paywall-dismiss" onclick="document.getElementById('paywall').style.display='none'">Preview features →</span>
+    </div>
+  </div>
+</div>
+
+<!-- REPORT MODAL -->
+<div class="report-modal-overlay" id="report-modal">
+  <div class="report-modal" style="position:relative;">
+    <button class="report-close" onclick="closeReport()">✕</button>
+    <div class="report-modal-head" id="report-modal-head"></div>
+    <div class="report-modal-body" id="report-modal-body"></div>
+  </div>
+</div>
+
+<div class="page-wrap">
+
+  <!-- ═══ DASHBOARD ═══ -->
+  <div id="scout-dashboard">
+
+    <!-- Top Prospect -->
+    <div style="margin-top:24px;">
+      <div class="sec-label">Top Prospect This Week</div>
+      <div class="prospect-card">
+        <div>
+          <div class="prospect-label">
+            <span class="pulse-dot"></span>
+            Ranked #1 · Auckland Division · 2026
+          </div>
+          <div class="prospect-name">Liam Faleolo</div>
+          <div class="prospect-sub">SG &nbsp;·&nbsp; Year 11 &nbsp;·&nbsp; Auckland Grammar &nbsp;·&nbsp; 19.8 PPG</div>
+          <div class="prospect-badges">
+            <span class="prospect-badge">Rating: 90/100</span>
+            <span class="prospect-badge-neutral">Potential: Generational</span>
+            <span class="prospect-badge-neutral">#7 · Year 11</span>
+          </div>
+        </div>
+        <div class="prospect-right">
+          <img src="logos/ags.jpg" alt="AGS" style="width:80px;height:80px;border-radius:50%;object-fit:cover;border:3px solid rgba(0,255,135,0.3);margin:0 auto 4px;display:block;">
+          <button class="prospect-view-btn" onclick="switchTool('reports',document.getElementById('htab-reports'));setTimeout(()=>openReport(6),300)">View Full Report</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stat Strip -->
+    <div class="stat-strip">
+      <div class="stat-tile">
+        <div class="stat-tile-num" id="stat-players">38</div>
+        <div class="stat-tile-lbl">Players Indexed</div>
+      </div>
+      <div class="stat-tile">
+        <div class="stat-tile-num" id="stat-games">47</div>
+        <div class="stat-tile-lbl">Games in Network</div>
+      </div>
+      <div class="stat-tile">
+        <div class="stat-tile-num" id="stat-reels">5</div>
+        <div class="stat-tile-lbl">Reels Saved</div>
+      </div>
+      <div class="stat-tile">
+        <div class="stat-tile-num" id="stat-schools">8</div>
+        <div class="stat-tile-lbl">Schools Covered</div>
+      </div>
+    </div>
+
+    <!-- Quick Actions + Rankings -->
+    <div class="dash-grid">
+
+      <!-- Recent Activity -->
+      <div>
+        <div class="sec-label">Recent Activity</div>
+        <div class="activity-card">
+          <div class="activity-row">
+            <div class="activity-dot" style="background:var(--scout-accent);"></div>
+            <div class="activity-text">AI report generated for <b>Jaxon Heremaia</b></div>
+            <div class="activity-time">2h ago</div>
+          </div>
+          <div class="activity-row">
+            <div class="activity-dot" style="background:#60A5FA;"></div>
+            <div class="activity-text">Reel built — <b>Parata rim protection highlights</b> · 7 clips</div>
+            <div class="activity-time">Yesterday</div>
+          </div>
+          <div class="activity-row">
+            <div class="activity-dot" style="background:#F59E0B;"></div>
+            <div class="activity-text">Player search — <b>SG, Year 12, Sort: PPG</b> — 3 results</div>
+            <div class="activity-time">2d ago</div>
+          </div>
+          <div class="activity-row">
+            <div class="activity-dot" style="background:var(--scout-accent);"></div>
+            <div class="activity-text">AI report generated for <b>Liam Faleolo</b></div>
+            <div class="activity-time">3d ago</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="quick-actions-wrap">
+        <div class="qa-label">Quick Actions</div>
+        <button class="qa-btn" onclick="switchTool('reports',document.getElementById('htab-reports'))">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--scout-accent)" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+          View All Player Reports
+        </button>
+        <button class="qa-btn" onclick="switchTool('reel',document.getElementById('htab-reel'))">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--scout-accent)" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+          Build a Highlight Reel
+        </button>
+        <button class="qa-btn" onclick="switchTool('search',document.getElementById('htab-search'))">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--scout-accent)" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          Search Players
+        </button>
+      </div>
+    </div>
+
+    <!-- This Week's Rankings -->
+    <div class="sec-label">This Week's Rankings <a href="#" onclick="switchTool('reports',document.getElementById('htab-reports'));return false;">See all →</a></div>
+    <div class="rankings-card">
+      <div class="rank-row">
+        <div class="rank-num">1</div>
+        <img src="logos/ros.png" alt="ROS" style="width:28px;height:28px;border-radius:50%;object-fit:cover;flex-shrink:0;">
+        <div style="flex:1;">
+          <div class="rank-name">Jaxon Heremaia</div>
+          <div class="rank-school">Rosmini · SG · Yr 12</div>
+        </div>
+        <div style="text-align:right;">
+          <div class="rank-ppg">21.2</div>
+          <div class="rank-ppg-lbl">PPG</div>
+        </div>
+        <div class="move-badge move-up">↑2</div>
+      </div>
+      <div class="rank-row">
+        <div class="rank-num">2</div>
+        <img src="logos/ags.jpg" alt="AGS" style="width:28px;height:28px;border-radius:50%;object-fit:cover;flex-shrink:0;">
+        <div style="flex:1;">
+          <div class="rank-name">Liam Faleolo</div>
+          <div class="rank-school">Grammar · SG · Yr 11</div>
+        </div>
+        <div style="text-align:right;">
+          <div class="rank-ppg">19.8</div>
+          <div class="rank-ppg-lbl">PPG</div>
+        </div>
+        <div class="move-badge move-up">↑1</div>
+      </div>
+      <div class="rank-row">
+        <div class="rank-num">3</div>
+        <img src="logos/stk.jpg" alt="STK" style="width:28px;height:28px;border-radius:50%;object-fit:cover;flex-shrink:0;">
+        <div style="flex:1;">
+          <div class="rank-name">Jordan Taufa</div>
+          <div class="rank-school">St Kent · PG · Yr 12</div>
+        </div>
+        <div style="text-align:right;">
+          <div class="rank-ppg">17.3</div>
+          <div class="rank-ppg-lbl">PPG</div>
+        </div>
+        <div class="move-badge move-flat">—</div>
+      </div>
+      <div class="rank-row">
+        <div class="rank-num">4</div>
+        <img src="logos/ags.jpg" alt="AGS" style="width:28px;height:28px;border-radius:50%;object-fit:cover;flex-shrink:0;">
+        <div style="flex:1;">
+          <div class="rank-name">Tane Ngata</div>
+          <div class="rank-school">Grammar · PG · Yr 13</div>
+        </div>
+        <div style="text-align:right;">
+          <div class="rank-ppg">18.4</div>
+          <div class="rank-ppg-lbl">PPG</div>
+        </div>
+        <div class="move-badge move-down">↓1</div>
+      </div>
+      <div class="rank-row">
+        <div class="rank-num">5</div>
+        <img src="logos/ros.png" alt="ROS" style="width:28px;height:28px;border-radius:50%;object-fit:cover;flex-shrink:0;">
+        <div style="flex:1;">
+          <div class="rank-name">Noah Harawira</div>
+          <div class="rank-school">Rosmini · SF · Yr 13</div>
+        </div>
+        <div style="text-align:right;">
+          <div class="rank-ppg">15.9</div>
+          <div class="rank-ppg-lbl">PPG</div>
+        </div>
+        <div class="move-badge move-flat">—</div>
+      </div>
+    </div>
+
+  </div><!-- /dashboard -->
+
+  <!-- ═══ TOOL: PLAYER REPORTS ═══ -->
+  <div id="tool-reports" class="tab-pane hidden">
+    <div class="sec-label" style="margin-top:24px;">AI Player Reports <span>8 athletes · Auckland Division</span></div>
+    <div class="player-grid-dark" id="player-grid"></div>
+  </div>
+
+  <!-- ═══ TOOL: REEL BUILDER ═══ -->
+  <div id="tool-reel" class="tab-pane hidden">
+    <div class="sec-label" style="margin-top:24px;">AI Reel Builder <span>Powered by Courtside Film</span></div>
+    <div class="reel-builder-wrap">
+      <div style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);margin-bottom:10px;">Describe the reel you want</div>
+      <div class="reel-input-row">
+        <input class="reel-input" id="reel-query" type="text" placeholder="e.g. Tane Ngata's best defensive plays of the 2026 season…" value="Tane Ngata's best defensive plays of the 2026 season">
+        <button class="reel-build-btn" onclick="buildReel()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="#fff"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          Build Reel
+        </button>
+      </div>
+      <div class="reel-chips">
+        <div class="reel-chip" onclick="setQuery(this)">Ngata defensive plays vs Grammar</div>
+        <div class="reel-chip" onclick="setQuery(this)">Heremaia pull-up jumpers — 2026</div>
+        <div class="reel-chip" onclick="setQuery(this)">Faleolo fast break finishes</div>
+        <div class="reel-chip" onclick="setQuery(this)">Parata blocks — full season</div>
+        <div class="reel-chip" onclick="setQuery(this)">Tuilagi off-ball wing cuts</div>
+        <div class="reel-chip" onclick="setQuery(this)">Best plays — NZ Under-18 prospects</div>
+      </div>
+    </div>
+
+    <div class="reel-result-wrap">
+      <div class="reel-result-hdr">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--scout-accent)" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+        <div class="reel-result-title" id="reel-title">Tane Ngata — Top Defensive Plays · 2026 Season</div>
+        <div class="reel-result-meta" id="reel-meta">11 clips · 4m 32s · 8 games</div>
+      </div>
+      <div class="reel-player-dark" onclick="alert('In the full version, this plays your compiled highlight reel inline.')">
+        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px;">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:48px;color:rgba(255,255,255,0.04);letter-spacing:3px;">COURTSIDE FILM</div>
+          <div style="font-size:11px;color:rgba(255,255,255,0.15);letter-spacing:.1em;text-transform:uppercase;">Ngata · Defensive Reel · 2026</div>
+        </div>
+        <div class="reel-play-circle">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        </div>
+      </div>
+      <div class="reel-timeline-dark" id="reel-timeline"></div>
+      <div class="reel-actions-dark">
+        <button class="reel-action-dark" onclick="alert('Downloads as MP4 in the full version.')">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download MP4
+        </button>
+        <button class="reel-action-dark" onclick="alert('Generates a shareable link in the full version.')">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+          Share Link
+        </button>
+        <button class="reel-action-dark" onclick="buildReel()">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+          Regenerate
+        </button>
+        <a href="https://courtside-film.fly.dev" target="_blank" class="reel-action-dark" style="margin-left:auto;text-decoration:none;">
+          Open in Film →
+        </a>
+      </div>
+    </div>
+
+    <div class="sec-label">Saved Reels <span>5 total</span></div>
+    <div class="saved-reels-grid" id="saved-reels"></div>
+  </div>
+
+  <!-- ═══ TOOL: PLAYER SEARCH ═══ -->
+  <div id="tool-search" class="tab-pane hidden">
+    <div class="sec-label" style="margin-top:24px;">Player Search <span>Auckland Division · 2026</span></div>
+    <div class="search-bar-row">
+      <input class="search-input-dark" id="search-input" type="text" placeholder="Search by name or school…" oninput="renderSearch()">
+      <select class="search-filter" id="filter-pos" onchange="renderSearch()">
+        <option value="">All Positions</option>
+        <option value="PG">PG</option>
+        <option value="SG">SG</option>
+        <option value="SF">SF</option>
+        <option value="PF">PF</option>
+        <option value="C">C</option>
+      </select>
+      <select class="search-filter" id="filter-stat" onchange="renderSearch()">
+        <option value="ppg">Sort: PPG</option>
+        <option value="rpg">Sort: RPG</option>
+        <option value="apg">Sort: APG</option>
+      </select>
+    </div>
+    <div class="search-results-dark" id="search-grid"></div>
+  </div>
+
+</div>
+
+<!-- MOBILE BAR -->
+<div class="mobile-bar">
+  <button class="mobile-bar-btn active" onclick="switchTool('home',this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>Home
+  </button>
+  <button class="mobile-bar-btn" onclick="switchTool('reports',this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Reports
+  </button>
+  <button class="mobile-bar-btn" onclick="switchTool('reel',this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>Reel
+  </button>
+  <button class="mobile-bar-btn" onclick="switchTool('search',this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>Search
+  </button>
+</div>
+
+<script>
+// ═══════════════════════════════════
+// DATA
+// ═══════════════════════════════════
+const players = [
+  { id:1, number:"3", initials:"TN", name:"Tane Ngata", school:"Auckland Grammar", schoolColor:"#001f5b", position:"PG", height:'6\'1"', year:"Year 13", ppg:18.4, rpg:4.2, apg:7.1, stl:2.1, blk:0.3, fg:"47.2", three:"38.4", ft:"82.1",
+    aiReport:{ rating:88, grade:"A−", defensive:"B+", potential:"Elite", comparable:"Comparable: Young Steph Curry-type — primary ball-handler, pull-up game, IQ", tendencies:["Pull-up three off DHO","Probe left, finish right","Full-court press break initiator","Draw + kick to corner shooters"], verdict:"Ngata's combination of playmaking vision and perimeter shooting makes him the most NBA-projectable guard in the Auckland division. At 17, his decision-making under pressure rivals many Year 13 guards nationally.", projection:"Projects as a top-5 NZ Under-18 prospect for 2026. Strong scholarship potential for AUS or US Division II/III programmes." }
+  },
+  { id:2, number:"23", initials:"JH", name:"Jaxon Heremaia", school:"Rosmini College", schoolColor:"#1c3a8c", position:"SG", height:'6\'3"', year:"Year 12", ppg:21.2, rpg:5.8, apg:3.4, stl:1.8, blk:0.6, fg:"49.1", three:"41.7", ft:"79.4",
+    aiReport:{ rating:91, grade:"A", defensive:"B", potential:"Elite", comparable:"Comparable: Devin Booker mould — volume scorer, high shot quality under pressure", tendencies:["Catch-and-shoot from 45-degree","DHO pull-up mid-range","Isolation left elbow","Early clock hunt off pin-down"], verdict:"The most prolific scorer in the Auckland division for his age group. Heremaia's ability to create his own shot from the perimeter — at 41.7% on three-point volume — is historically rare at this level in New Zealand.", projection:"Top NZ prospect for 2027. US D1 level talent if development continues at current trajectory." }
+  },
+  { id:3, number:"14", initials:"MT", name:"Marcus Tuilagi", school:"Rangitoto College", schoolColor:"#4a7ec7", position:"SF", height:'6\'6"', year:"Year 13", ppg:16.7, rpg:8.3, apg:2.1, stl:1.4, blk:1.9, fg:"53.8", three:"29.2", ft:"67.3",
+    aiReport:{ rating:84, grade:"B+", defensive:"A−", potential:"High", comparable:"Comparable: Physical two-way wing — Mikal Bridges defensive instincts without the shooting (yet)", tendencies:["High-low post entry, face-up","Weak-side block seeker","Transition rim-run off made baskets","Help defence with elite timing"], verdict:"Tuilagi's defensive versatility is the headline — guarding positions 1–4 while averaging 1.9 blocks from the wing is exceptional. Offensively limited by below-average three-point shooting.", projection:"If three-point shooting reaches 34%+, Tuilagi becomes a genuine Division I prospect. Currently projects as AUS NBL pathway." }
+  },
+  { id:4, number:"42", initials:"CR", name:"Callum Reid", school:"St Kentigern College", schoolColor:"#1D4ED8", position:"PF", height:'6\'7"', year:"Year 12", ppg:14.5, rpg:9.1, apg:1.8, stl:0.9, blk:2.4, fg:"58.2", three:"0.0", ft:"61.8",
+    aiReport:{ rating:82, grade:"B+", defensive:"A", potential:"High", comparable:"Comparable: Steven Adams developmental archetype — physical big with elite instincts", tendencies:["Drop step left hand","Post seal, catch high, power up","Offensive rebound putback","Vertical shot blocking"], verdict:"Reid's physical profile is the rarest commodity in NZ high school basketball — 6'7\" with the frame and hands to compete at a high level. His 58.2% FG rate reflects outstanding post technique for a Year 12.", projection:"NBL New Zealand pathway or Australian college." }
+  },
+  { id:5, number:"55", initials:"EP", name:"Ethan Parata", school:"De La Salle College", schoolColor:"#005c1a", position:"C", height:'6\'10"', year:"Year 13", ppg:12.3, rpg:11.2, apg:1.2, stl:0.7, blk:3.1, fg:"62.4", three:"0.0", ft:"55.9",
+    aiReport:{ rating:86, grade:"A−", defensive:"A", potential:"Elite", comparable:"Comparable: Bam Adebayo developmental stage — rim protector with mobile feet", tendencies:["Vertical rim protection, minimal fouling","Short-roll catch and finish","Offensive rebound position and putback","Pick-and-roll coverage, ice or hedge"], verdict:"At 6'10\" with the footwork and hands Parata possesses, he is a generational talent for NZ high school basketball. His 3.1 blocks per game from the centre leads the division by a wide margin.", projection:"AUS NBL Academy or US D1 legitimate pathway." }
+  },
+  { id:6, number:"7", initials:"LF", name:"Liam Faleolo", school:"Auckland Grammar", schoolColor:"#001f5b", position:"SG", height:'6\'2"', year:"Year 11", ppg:19.8, rpg:4.5, apg:5.3, stl:2.4, blk:0.4, fg:"44.8", three:"36.9", ft:"87.2",
+    aiReport:{ rating:90, grade:"A", defensive:"B+", potential:"Generational", comparable:"Comparable: Young Donovan Mitchell — attacking guard with elite competitiveness", tendencies:["Drive right, finish with contact","Corner three catch-and-shoot","Transition lead guard ball-push","Late-clock shot creation isolation"], verdict:"The most exciting prospect in the Auckland division — full stop. Faleolo at 16 is already posting numbers that challenge the best Year 13 guards. His 87.2% free throw rate signals elite shooting mechanics.", projection:"#1 NZ prospect for 2028. The ceiling on this player is higher than any player in this database." }
+  },
+  { id:7, number:"11", initials:"NH", name:"Noah Harawira", school:"Rosmini College", schoolColor:"#1c3a8c", position:"SF", height:'6\'5"', year:"Year 13", ppg:15.9, rpg:7.4, apg:3.7, stl:1.6, blk:1.1, fg:"46.3", three:"33.1", ft:"74.5",
+    aiReport:{ rating:80, grade:"B", defensive:"B+", potential:"Solid", comparable:"Comparable: Defensive-first utility wing — Bruce Brown developmental mould", tendencies:["Ball pressure, force baseline","Back-cut when overplayed on wing","Transition outlet pass, fill wing","Post the smaller guard in mismatches"], verdict:"Harawira's value is in his defensive versatility and basketball IQ — two attributes that don't show up fully in box scores but are visible on film.", projection:"NZ domestic pathway — NBL or NBL1 level." }
+  },
+  { id:8, number:"0", initials:"JT", name:"Jordan Taufa", school:"St Kentigern College", schoolColor:"#1D4ED8", position:"PG", height:'6\'0"', year:"Year 12", ppg:17.3, rpg:3.8, apg:6.9, stl:2.6, blk:0.2, fg:"43.7", three:"35.8", ft:"84.6",
+    aiReport:{ rating:83, grade:"B+", defensive:"A−", potential:"High", comparable:"Comparable: Defensive PG archetype — Jrue Holiday disruptive instincts", tendencies:["Pressure on ball, look for deflections","Push pace off live-ball turnovers","Pick-and-roll ball-handler, reject screen","Late clock create for teammate first"], verdict:"Taufa's steal rate of 2.6 per game is the highest for any point guard in the Auckland division. His defensive pressure creates transition opportunities that elevate his entire team.", projection:"Strong domestic pathway. Style of play is highly coachable and translates to any system." }
+  },
+];
+
+const savedReels = [
+  { title:"Heremaia — 3-Point Shooting", clips:9, duration:"3m 18s", color:"#9b1c1c", tag:"SHOOTING" },
+  { title:"Faleolo Fast Break Finishes", clips:12, duration:"4m 41s", color:"#1a4a8c", tag:"HIGHLIGHTS" },
+  { title:"Parata Rim Protection", clips:7, duration:"2m 51s", color:"#7a5c14", tag:"DEFENCE" },
+  { title:"Tuilagi Off-Ball Wing Cuts", clips:9, duration:"3m 28s", color:"#1a5c3c", tag:"MOVEMENT" },
+  { title:"Top NZ Under-18 Prospects", clips:16, duration:"6m 04s", color:"#065F46", tag:"SCOUTING" },
+];
+
+const clipSamples = [
+  {label:"STEAL+RUN",game:"vs ROS"},{label:"HELP-D",game:"vs AGS"},{label:"DEFLECT",game:"vs STK"},
+  {label:"CONTEST",game:"vs RAN"},{label:"BLOCK",game:"vs AGS"},{label:"STEAL",game:"vs KIN"},
+  {label:"HELP-D",game:"vs ROS"},{label:"CONTEST",game:"vs STK"},{label:"DEFLECT",game:"vs WBH"},
+  {label:"BLOCK",game:"vs SCH"},{label:"STEAL+3",game:"vs RAN"},
+];
+
+const tickerItems = [
+  {status:'FINAL',home:'AGS',homeScore:78,away:'ROS',awayScore:72,homeWin:true},
+  {status:'FINAL',home:'STK',homeScore:65,away:'RAN',awayScore:70,homeWin:false},
+  {status:'LIVE',home:'KIN',homeScore:41,away:'AGS',awayScore:38,homeWin:true},
+  {status:'FINAL',home:'WBH',homeScore:58,away:'STK',awayScore:61,homeWin:false},
+  {status:'FINAL',home:'ROS',homeScore:82,away:'KIN',awayScore:67,homeWin:true},
+];
+
+// ═══════════════════════════════════
+// INIT
+// ═══════════════════════════════════
+function init() {
+  const params = new URLSearchParams(window.location.search);
+  const unlocked = localStorage.getItem('cs_premium') === 'true';
+  if (!unlocked && params.get('preview') !== 'open') {
+    setTimeout(() => document.getElementById('paywall').style.display = 'flex', 500);
+  }
+  renderTicker();
+  renderPlayerGrid();
+  renderTimeline();
+  renderSavedReels();
+  renderSearch();
+  // Count-up stats
+  countUp('stat-players', 38);
+  countUp('stat-games', 47);
+  countUp('stat-reels', 5);
+  countUp('stat-schools', 8);
+}
+
+function countUp(id, target) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const start = performance.now();
+  const dur = 800;
+  function tick(now) {
+    const t = Math.min((now - start) / dur, 1);
+    const ease = 1 - Math.pow(1 - t, 3);
+    el.textContent = Math.round(ease * target);
+    if (t < 1) requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
+
+function unlockScout() {
+  localStorage.setItem('cs_premium','true');
+  document.getElementById('paywall').style.display = 'none';
+}
+
+// ═══════════════════════════════════
+// TICKER
+// ═══════════════════════════════════
+function renderTicker() {
+  const items = [...tickerItems, ...tickerItems];
+  document.getElementById('scout-ticker').innerHTML = items.map(g => `
+    <div class="ticker-item">
+      <span class="t-status${g.status==='LIVE'?' live':''}">${g.status}</span>
+      <span class="t-team"><span class="t-abbr">${g.home}</span><span class="t-score ${g.homeWin?'win':'lose'}">${g.homeScore}</span></span>
+      <span class="t-sep">–</span>
+      <span class="t-team"><span class="t-score ${!g.homeWin?'win':'lose'}">${g.awayScore}</span><span class="t-abbr">${g.away}</span></span>
+    </div>`).join('');
+}
+
+// ═══════════════════════════════════
+// TOOL TABS
+// ═══════════════════════════════════
+function switchTool(tool, el) {
+  document.querySelectorAll('.cs-nav-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.mobile-bar-btn').forEach(t => t.classList.remove('active'));
+  if (el) el.classList.add('active');
+
+  const dash = document.getElementById('scout-dashboard');
+  const panes = ['tool-reports','tool-reel','tool-search'];
+
+  if (tool === 'home') {
+    dash.style.display = '';
+    panes.forEach(id => document.getElementById(id).classList.add('hidden'));
+    return;
+  }
+  dash.style.display = 'none';
+  panes.forEach(id => {
+    const el2 = document.getElementById(id);
+    if (id === 'tool-'+tool) el2.classList.remove('hidden');
+    else el2.classList.add('hidden');
+  });
+}
+
+// ═══════════════════════════════════
+// PLAYER REPORTS
+// ═══════════════════════════════════
+function renderPlayerGrid() {
+  document.getElementById('player-grid').innerHTML = players.map(p => `
+    <div class="player-card-dark">
+      <div class="player-card-head">
+        <div class="hex hex-md" style="background:${p.schoolColor};">${p.initials}</div>
+        <div class="player-card-info">
+          <div class="player-card-name">#${p.number} ${p.name}</div>
+          <div class="player-card-sub">${p.position} · ${p.year} · ${p.school}</div>
+        </div>
+        <div>
+          <div class="player-card-rating">${p.aiReport.rating}</div>
+          <div class="player-card-rating-lbl">Rating</div>
+        </div>
+      </div>
+      <div class="player-stats-row">
+        <div class="player-stat"><div class="player-stat-num">${p.ppg}</div><div class="player-stat-lbl">PPG</div></div>
+        <div class="player-stat"><div class="player-stat-num">${p.rpg}</div><div class="player-stat-lbl">RPG</div></div>
+        <div class="player-stat"><div class="player-stat-num">${p.apg}</div><div class="player-stat-lbl">APG</div></div>
+        <div class="player-stat"><div class="player-stat-num">${p.fg}%</div><div class="player-stat-lbl">FG%</div></div>
+      </div>
+      <div class="player-card-foot">
+        <span style="font-size:11px;color:var(--text-muted);">${p.aiReport.potential}</span>
+        <button class="player-card-btn" onclick="openReport(${p.id})">View Report</button>
+      </div>
+    </div>`).join('');
+}
+
+function openReport(id) {
+  const p = players.find(x => x.id === id);
+  if (!p) return;
+  document.getElementById('report-modal-head').innerHTML = `
+    <div class="hex hex-xl" style="background:${p.schoolColor};">${p.initials}</div>
+    <div class="report-modal-info">
+      <div style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--scout-accent);margin-bottom:4px;">${p.aiReport.grade} · ${p.aiReport.rating}/100</div>
+      <div class="report-modal-name">${p.name}</div>
+      <div class="report-modal-sub">${p.position} · ${p.height} · ${p.year} · ${p.school}</div>
+    </div>`;
+  document.getElementById('report-modal-body').innerHTML = `
+    <div class="report-section">
+      <div class="report-section-title">Season Averages</div>
+      <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;">
+        ${[['PPG',p.ppg],['RPG',p.rpg],['APG',p.apg],['STL',p.stl],['BLK',p.blk]].map(([l,v])=>`
+          <div style="background:var(--surface-3);border:1px solid var(--border-subtle);border-radius:5px;padding:10px;text-align:center;">
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--scout-accent);">${v}</div>
+            <div style="font-size:9px;color:var(--text-muted);font-weight:700;text-transform:uppercase;">${l}</div>
+          </div>`).join('')}
+      </div>
+    </div>
+    <div class="report-section">
+      <div class="report-section-title">Shooting</div>
+      <div style="display:flex;gap:8px;">
+        ${[['FG%',p.fg],['3P%',p.three],['FT%',p.ft]].map(([l,v])=>`
+          <div style="background:var(--surface-3);border:1px solid var(--border-subtle);border-radius:5px;padding:10px 16px;text-align:center;">
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--scout-accent);">${v}%</div>
+            <div style="font-size:9px;color:var(--text-muted);font-weight:700;text-transform:uppercase;">${l}</div>
+          </div>`).join('')}
+        <div style="flex:1;background:var(--surface-3);border:1px solid var(--border-subtle);border-radius:5px;padding:10px 16px;">
+          <div style="font-size:11px;color:var(--scout-accent);font-weight:700;margin-bottom:3px;">Defensive Grade: ${p.aiReport.defensive}</div>
+          <div style="font-size:11px;color:var(--text-muted);">Potential: ${p.aiReport.potential}</div>
+        </div>
+      </div>
+    </div>
+    <div class="report-section">
+      <div class="report-section-title">Tendencies</div>
+      <div>${p.aiReport.tendencies.map(t=>`<span class="tendency-pill">${t}</span>`).join('')}</div>
+    </div>
+    <div class="report-section">
+      <div class="report-section-title">Scout Verdict</div>
+      <div class="report-verdict">${p.aiReport.verdict}</div>
+    </div>
+    <div class="report-section">
+      <div class="report-section-title">Projection</div>
+      <div class="report-verdict">${p.aiReport.projection}</div>
+    </div>
+    <div class="report-section">
+      <div class="report-section-title">Comparable</div>
+      <div class="report-verdict">${p.aiReport.comparable}</div>
+    </div>`;
+  document.getElementById('report-modal').classList.add('active');
+}
+
+function closeReport() {
+  document.getElementById('report-modal').classList.remove('active');
+}
+
+// ═══════════════════════════════════
+// REEL BUILDER
+// ═══════════════════════════════════
+function renderTimeline() {
+  document.getElementById('reel-timeline').innerHTML = clipSamples.map((c,i) => `
+    <div class="reel-clip">
+      <div class="reel-clip-label">${c.label}</div>
+      <div class="reel-clip-game">${c.game}</div>
+    </div>`).join('');
+}
+
+function buildReel() {
+  const q = document.getElementById('reel-query').value.trim() || 'Top plays';
+  document.getElementById('reel-title').textContent = q + ' — Compiled Reel';
+  document.getElementById('reel-meta').textContent = Math.floor(Math.random()*8+5) + ' clips · ' + Math.floor(Math.random()*5+2) + 'm ' + Math.floor(Math.random()*50+10) + 's';
+}
+
+function setQuery(el) { document.getElementById('reel-query').value = el.textContent.trim(); }
+
+function renderSavedReels() {
+  document.getElementById('saved-reels').innerHTML = savedReels.map(r => `
+    <div class="saved-reel-card">
+      <div class="saved-reel-thumb" style="background:linear-gradient(135deg,${r.color}88,${r.color}44);">
+        <div class="saved-reel-tag">${r.tag}</div>
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="rgba(255,255,255,0.5)"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+      </div>
+      <div class="saved-reel-body">
+        <div class="saved-reel-title">${r.title}</div>
+        <div class="saved-reel-meta">${r.clips} clips · ${r.duration}</div>
+      </div>
+    </div>`).join('');
+}
+
+// ═══════════════════════════════════
+// PLAYER SEARCH
+// ═══════════════════════════════════
+function renderSearch() {
+  const q = (document.getElementById('search-input')?.value || '').toLowerCase();
+  const pos = document.getElementById('filter-pos')?.value || '';
+  const stat = document.getElementById('filter-stat')?.value || 'ppg';
+  let list = players.filter(p =>
+    (!q || p.name.toLowerCase().includes(q) || p.school.toLowerCase().includes(q)) &&
+    (!pos || p.position === pos)
+  ).sort((a,b) => b[stat] - a[stat]);
+  document.getElementById('search-grid').innerHTML = list.map(p => `
+    <div class="player-card-dark" onclick="openReport(${p.id})">
+      <div class="player-card-head">
+        <div class="hex hex-sm" style="background:${p.schoolColor};">${p.initials}</div>
+        <div class="player-card-info">
+          <div class="player-card-name" style="font-size:18px;">${p.name}</div>
+          <div class="player-card-sub">${p.position} · ${p.year} · ${p.school}</div>
+        </div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--scout-accent);">${p[stat]}</div>
+      </div>
+    </div>`).join('');
+}
+
+document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>
