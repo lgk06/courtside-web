@@ -1,0 +1,1386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Courtside · Media</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+/* Media-mode accent overrides */
+:root { --mode-accent: var(--purple-accent); --mode-primary: var(--purple-primary); --mode-border: var(--purple-border); }
+
+/* ─── HERO ─── */
+.hero {
+  display: grid; grid-template-columns: 3fr 2fr;
+  gap: 2px; height: 380px; margin: 20px 0;
+  border-radius: 8px; overflow: hidden;
+}
+.hero-main {
+  position: relative; display: flex; flex-direction: column;
+  justify-content: flex-end; padding: 26px 30px; overflow: hidden;
+}
+.hero-bg-num {
+  position: absolute; right: -20px; top: 50%; transform: translateY(-50%);
+  font-family: 'Bebas Neue', sans-serif; font-size: 280px; line-height: 1;
+  color: rgba(255,255,255,0.04); letter-spacing: -4px;
+  pointer-events: none; user-select: none;
+}
+.hero-grad {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,.35) 60%, transparent 100%);
+}
+.hero-content { position: relative; z-index: 2; }
+.hero-tag {
+  display: inline-block; padding: 3px 9px; border-radius: 3px;
+  font-family: 'Bebas Neue', sans-serif; font-size: 11px;
+  letter-spacing: .1em; text-transform: uppercase;
+  background: var(--purple-subtle); border: 1px solid var(--purple-border);
+  color: var(--purple-accent); margin-bottom: 10px;
+}
+.hero-headline {
+  font-family: 'Bebas Neue', sans-serif; font-size: 48px;
+  line-height: 1.05; color: var(--courtside-white);
+  margin-bottom: 8px; letter-spacing: .5px; max-width: 520px;
+}
+.hero-blurb {
+  font-size: 14px; color: rgba(255,255,255,.6); line-height: 1.6;
+  margin-bottom: 12px; max-width: 480px;
+}
+.hero-stat-callout {
+  font-family: 'Bebas Neue', sans-serif; font-size: 28px;
+  color: var(--purple-accent); letter-spacing: 1px;
+}
+.hero-stack { display: flex; flex-direction: column; gap: 2px; }
+.hero-side {
+  flex: 1; min-height: 0; position: relative;
+  display: flex; flex-direction: column;
+  justify-content: flex-end; padding: 14px 16px;
+  overflow: hidden; cursor: pointer;
+  transition: brightness .15s;
+}
+.hero-side:hover { filter: brightness(1.1); }
+.hero-side .hero-grad { background: linear-gradient(to top, rgba(0,0,0,.9) 0%, transparent 70%); }
+.hs-tag {
+  position: relative; z-index: 1;
+  font-family: 'Bebas Neue', sans-serif; font-size: 9px;
+  letter-spacing: .1em; text-transform: uppercase;
+  background: var(--purple-subtle); border: 1px solid var(--purple-border);
+  color: var(--purple-accent); padding: 2px 6px; border-radius: 3px;
+  display: inline-block; margin-bottom: 5px;
+}
+.hs-headline {
+  font-family: 'Bebas Neue', sans-serif; font-size: 19px;
+  color: var(--courtside-white); line-height: 1.1;
+  position: relative; z-index: 1; margin-bottom: 4px;
+}
+.hs-stat { font-family: 'Bebas Neue', sans-serif; font-size: 15px; color: var(--purple-accent); position: relative; z-index: 1; }
+
+/* ─── CONTENT LAYOUT ─── */
+.content-layout { display: grid; grid-template-columns: 65fr 35fr; gap: 24px; }
+
+/* ─── CAT TABS ─── */
+.cat-tabs {
+  display: flex; gap: 0;
+  border-bottom: 1px solid var(--border-subtle); margin-bottom: 18px;
+}
+.cat-tab {
+  padding: 10px 13px;
+  font-size: 12px; font-weight: 600; color: var(--text-muted);
+  cursor: pointer; border: none; background: none;
+  border-bottom: 2px solid transparent; margin-bottom: -1px;
+  transition: color .15s, border-color .15s; white-space: nowrap;
+}
+.cat-tab:hover { color: var(--text-secondary); }
+.cat-tab.active { color: var(--purple-accent); border-bottom-color: var(--purple-accent); }
+
+/* ─── ARTICLE GRID ─── */
+.article-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px; }
+
+/* ─── PLAYERS STRIP ─── */
+.players-strip { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; margin-bottom: 24px; }
+.pstrip-card {
+  background: var(--surface-1); border: 1px solid var(--border-subtle);
+  border-radius: 6px; padding: 12px; text-align: center; cursor: pointer;
+  transition: transform .2s, box-shadow .2s;
+}
+.pstrip-card:hover { transform: translateY(-3px); box-shadow: 0 6px 22px rgba(0,0,0,.5); }
+
+/* ─── ALL PLAYERS GRID ─── */
+.all-players-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; }
+
+/* ─── DISCOVER ─── */
+.discover-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; }
+.disc-card {
+  background: var(--surface-2); border: 1px solid var(--border-subtle);
+  border-radius: 6px; overflow: hidden; cursor: pointer;
+  transition: transform .2s, box-shadow .2s, border-color .15s;
+}
+.disc-card:hover { transform: translateY(-3px); box-shadow: 0 8px 28px rgba(0,0,0,.6); border-color: var(--purple-border); }
+.disc-thumb { height: 80px; display: flex; align-items: center; justify-content: center; position: relative; }
+.disc-body { padding: 10px 12px 12px; }
+
+/* ─── RANKINGS ─── */
+.rank-table { width: 100%; border-collapse: collapse; }
+.rank-table th {
+  font-size: 10px; font-weight: 700; letter-spacing: .07em;
+  text-transform: uppercase; color: var(--text-muted);
+  padding: 8px 10px; text-align: left;
+  border-bottom: 1px solid var(--border-subtle);
+}
+.rank-table td { padding: 10px; border-bottom: 1px solid var(--border-subtle); font-size: 13px; color: var(--text-secondary); }
+.rank-table tr:last-child td { border-bottom: none; }
+.rank-num { font-family: 'Bebas Neue', sans-serif; font-size: 20px; color: var(--text-primary); }
+.rank-stat { font-family: 'Bebas Neue', sans-serif; font-size: 22px; color: var(--purple-accent); }
+
+/* ─── STANDINGS ─── */
+.standings-hdr {
+  display: grid; grid-template-columns: 18px 1fr 26px 26px 42px;
+  gap: 4px; font-size: 10px; font-weight: 700; letter-spacing: .06em;
+  color: var(--text-muted); text-transform: uppercase;
+  padding-bottom: 6px; margin-bottom: 4px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+.standing-row {
+  display: grid; grid-template-columns: 18px 1fr 26px 26px 42px;
+  gap: 4px; padding: 6px 0; align-items: center;
+  border-bottom: 1px solid var(--border-subtle);
+}
+.standing-row:last-child { border-bottom: none; }
+.s-rank { font-family: 'Bebas Neue', sans-serif; font-size: 13px; color: var(--text-muted); }
+.s-name { font-size: 11px; font-weight: 700; color: var(--text-primary); }
+.s-num { font-family: 'Bebas Neue', sans-serif; font-size: 15px; text-align: center; color: var(--text-secondary); }
+.s-num.w { color: var(--courtside-white); }
+.s-ppg { font-family: 'Bebas Neue', sans-serif; font-size: 13px; color: var(--text-secondary); text-align: right; }
+
+/* ─── LEADERS ─── */
+.leader-row {
+  display: flex; align-items: center; gap: 8px;
+  padding: 6px 0; border-bottom: 1px solid var(--border-subtle);
+}
+.leader-row:last-child { border-bottom: none; }
+.l-rank { font-size: 11px; color: var(--text-muted); font-weight: 700; width: 14px; flex-shrink: 0; }
+.l-info { flex: 1; }
+.l-name { font-size: 12px; font-weight: 700; color: var(--text-primary); }
+.l-school { font-size: 10px; color: var(--text-secondary); }
+.l-bar-wrap { width: 50px; height: 3px; background: var(--border-subtle); border-radius: 2px; overflow: hidden; }
+.l-bar { height: 100%; background: var(--purple-primary); border-radius: 2px; }
+.l-val { font-family: 'Bebas Neue', sans-serif; font-size: 18px; color: var(--purple-accent); }
+
+/* ─── FILM TAB ─── */
+.film-hero {
+  position: relative; border-radius: 10px;
+  overflow: hidden; padding: 40px 36px;
+  margin: 20px 0 0; background: #07001A;
+}
+.film-court-lines {
+  position: absolute; inset: 0; opacity: .03;
+  background-image:
+    repeating-linear-gradient(0deg, transparent, transparent 47px, rgba(255,255,255,1) 47px, rgba(255,255,255,1) 48px),
+    repeating-linear-gradient(90deg, transparent, transparent 47px, rgba(255,255,255,1) 47px, rgba(255,255,255,1) 48px);
+}
+.film-spotlight {
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 70% 90% at 50% -10%, rgba(123,94,167,.55) 0%, transparent 65%);
+}
+.film-hero-content { position: relative; z-index: 1; }
+.film-hero-tag {
+  display: inline-block; padding: 3px 9px; border-radius: 3px;
+  font-size: 10px; font-weight: 700; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--purple-accent);
+  border: 1px solid var(--purple-border); background: var(--purple-subtle); margin-bottom: 12px;
+}
+.film-headline {
+  font-family: 'Bebas Neue', sans-serif; font-size: 60px;
+  line-height: 1; letter-spacing: 1px; margin-bottom: 16px;
+}
+.film-headline .ac { color: var(--purple-accent); }
+.film-headline .wh { color: var(--courtside-white); }
+.film-hero-bottom { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+.film-hero-desc { font-size: 14px; color: rgba(255,255,255,.5); line-height: 1.6; max-width: 440px; margin-bottom: 16px; }
+.film-tier-pills { display: flex; gap: 14px; flex-wrap: wrap; }
+.film-tier-col { display: flex; flex-direction: column; gap: 3px; }
+.film-tier-label { font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; margin-bottom: 3px; }
+.film-tier-label.free { color: var(--purple-accent); }
+.film-tier-label.locked { color: var(--playbook-accent); }
+.film-tier-item { font-size: 12px; color: rgba(255,255,255,.55); }
+.film-hero-actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.film-open-btn {
+  padding: 10px 20px; border-radius: 6px;
+  background: var(--purple-primary); color: var(--courtside-white);
+  font-size: 13px; font-weight: 700; border: none; cursor: pointer;
+  display: flex; align-items: center; gap: 7px; transition: background .15s; text-decoration: none;
+}
+.film-open-btn:hover { background: var(--purple-accent); color: #000; }
+.film-indexed-badge { font-size: 12px; color: var(--text-secondary); display: flex; align-items: center; gap: 6px; }
+.film-stats-grid {
+  display: grid; grid-template-columns: repeat(4,1fr);
+  gap: 2px; border-radius: 8px; overflow: hidden; margin: 20px 0;
+}
+.film-stat-tile {
+  background: var(--surface-2); padding: 18px; text-align: center;
+  border: 1px solid var(--border-subtle);
+}
+.film-stat-num {
+  font-family: 'Bebas Neue', sans-serif; font-size: 48px;
+  line-height: 1; letter-spacing: 1px;
+}
+.film-stat-lbl { font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--text-secondary); margin-top: 4px; }
+.film-games-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px; }
+.film-game-card {
+  background: var(--surface-1); border: 1px solid var(--border-subtle);
+  border-radius: 8px; overflow: hidden; cursor: pointer;
+  transition: transform .2s, box-shadow .2s, border-color .15s;
+}
+.film-game-card:hover { transform: translateY(-3px); box-shadow: 0 8px 28px rgba(0,0,0,.6); border-color: var(--purple-border); }
+.film-game-thumb {
+  height: 80px; position: relative;
+  display: flex; align-items: center; justify-content: center; gap: 16px;
+}
+.film-game-play-overlay {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(0,0,0,0); transition: background .15s;
+}
+.film-game-card:hover .film-game-play-overlay { background: rgba(0,0,0,.35); }
+.film-game-play-overlay svg { opacity: 0; transition: opacity .15s; }
+.film-game-card:hover .film-game-play-overlay svg { opacity: 1; }
+.film-game-body { padding: 12px 14px; display: flex; align-items: center; gap: 8px; }
+.film-game-name { font-size: 13px; font-weight: 700; color: var(--text-primary); }
+.film-game-meta { font-size: 11px; color: var(--text-secondary); margin-top: 2px; }
+.film-view-btn {
+  font-size: 11px; font-weight: 700; color: var(--purple-accent);
+  padding: 5px 10px; background: var(--purple-subtle);
+  border-radius: 4px; white-space: nowrap; text-decoration: none; flex-shrink: 0; margin-left: auto;
+}
+
+/* Playbook promo (film tab) */
+.film-pb-promo {
+  background: linear-gradient(135deg,#080F2E,#0E1D4A);
+  border: 1px solid var(--playbook-border); border-radius: 10px;
+  padding: 22px 28px; display: flex; align-items: center; gap: 22px;
+  margin-top: 20px; margin-bottom: 24px;
+}
+
+/* Tier table */
+.tier-table { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0; border-radius: 8px; overflow: hidden; border: 1px solid var(--border-subtle); margin-bottom: 24px; }
+.tier-col { padding: 18px; background: var(--surface-1); border-right: 1px solid var(--border-subtle); }
+.tier-col:last-child { border-right: none; }
+.tier-tag { font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; padding: 3px 10px; border-radius: 4px; display: inline-block; margin-bottom: 8px; }
+.tier-popular { font-size: 9px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: var(--scout-accent); margin-bottom: 3px; }
+.tier-heading { font-family: 'Bebas Neue', sans-serif; font-size: 22px; color: var(--text-primary); letter-spacing: .5px; margin-bottom: 3px; }
+.tier-price { font-size: 11px; color: var(--text-secondary); margin-bottom: 12px; }
+.tier-item { font-size: 12px; color: var(--text-secondary); padding: 4px 0; display: flex; align-items: center; gap: 6px; }
+
+/* Upload CTA */
+.film-upload-cta {
+  background: linear-gradient(135deg,#12002E,#1a0040,#07001A);
+  border-radius: 10px; padding: 40px; text-align: center;
+  border: 1px solid var(--purple-border); cursor: pointer;
+  transition: border-color .15s, box-shadow .15s;
+  margin-bottom: 8px;
+}
+.film-upload-cta:hover { border-color: var(--purple-accent); box-shadow: 0 0 48px rgba(167,139,250,.12); }
+.film-upload-headline { font-family: 'Bebas Neue', sans-serif; font-size: 40px; color: var(--courtside-white); letter-spacing: 1px; margin-bottom: 8px; }
+.film-upload-sub { font-size: 14px; color: var(--text-secondary); margin-bottom: 22px; }
+.film-upload-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 13px 32px; border-radius: 6px;
+  background: var(--purple-primary); color: var(--courtside-white);
+  font-size: 14px; font-weight: 700; border: none; cursor: pointer;
+  transition: background .15s;
+}
+.film-upload-btn:hover { background: var(--purple-accent); color: #000; }
+
+/* ─── MOBILE ─── */
+@media (max-width: 768px) {
+  .hero { grid-template-columns: 1fr; height: auto; }
+  .hero-stack { display: none; }
+  .hero-main { min-height: 280px; }
+  .content-layout { grid-template-columns: 1fr; }
+  .sidebar { position: static !important; max-height: none !important; }
+  .article-grid { grid-template-columns: 1fr; }
+  .players-strip { grid-template-columns: repeat(2,1fr); }
+  .all-players-grid { grid-template-columns: repeat(2,1fr); }
+  .discover-grid { grid-template-columns: repeat(2,1fr); }
+  .film-stats-grid { grid-template-columns: repeat(2,1fr); }
+  .tier-table { grid-template-columns: 1fr; }
+  .film-hero { padding: 28px 20px; }
+  .film-headline { font-size: 44px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ NAV ═══ -->
+<nav class="cs-nav">
+  <div class="cs-nav-inner">
+    <a href="/" class="cs-brand">
+      COURTSIDE<span class="sep">·</span><span class="mode">MEDIA</span>
+    </a>
+    <div class="cs-nav-tabs">
+      <button class="cs-nav-tab active" id="ntab-home"     onclick="switchTab('home',this)">Home</button>
+      <button class="cs-nav-tab"        id="ntab-rankings" onclick="switchTab('rankings',this)">Rankings</button>
+      <button class="cs-nav-tab"        id="ntab-players"  onclick="switchTab('players',this)">Players</button>
+      <button class="cs-nav-tab"        id="ntab-discover" onclick="switchTab('discover',this)">Discover</button>
+    </div>
+    <div class="cs-nav-right">
+      <a href="film.html" target="_blank" class="eco-bridge">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/></svg>
+        Courtside Film
+      </a>
+      <button class="eco-upgrade-scout" onclick="document.getElementById('scout-paywall')?.style?document.getElementById('scout-paywall').style.display='flex':window.location.href='scout.html'">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        Upgrade to Scout
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══ LIVE TICKER ═══ -->
+<div class="cs-ticker">
+  <div class="ticker-label">
+    <span class="pulse-dot" style="margin-right:5px;"></span> SCORES
+  </div>
+  <div class="ticker-scroll">
+    <div class="ticker-track" id="ticker-track"></div>
+  </div>
+</div>
+
+<!-- ═══ PAGE ═══ -->
+<div class="page-wrap">
+
+  <!-- HOME TAB -->
+  <div id="tab-home" class="tab-pane">
+    <!-- Hero -->
+    <div class="hero" id="hero-section"></div>
+
+    <!-- Content + Sidebar -->
+    <div class="content-layout">
+      <div class="main-col">
+        <div class="cat-tabs">
+          <button class="cat-tab active" onclick="filterFeed('all',this)">All</button>
+          <button class="cat-tab" onclick="filterFeed('recap',this)">Game Recaps</button>
+          <button class="cat-tab" onclick="filterFeed('feature',this)">Spotlights</button>
+          <button class="cat-tab" onclick="filterFeed('compile',this)">Compilations</button>
+          <button class="cat-tab" onclick="filterFeed('statwatch',this)">Stat Watch</button>
+        </div>
+        <div class="article-grid" id="article-grid"></div>
+        <div class="sec-label">Top Players This Week <a href="#">View all</a></div>
+        <div class="players-strip" id="players-strip"></div>
+      </div>
+
+      <aside class="sidebar" style="position:sticky;top:96px;max-height:calc(100vh - 110px);overflow-y:auto;scrollbar-width:none;">
+        <!-- Standings -->
+        <div class="sidebar-widget">
+          <div class="widget-hdr">Division Standings <a href="#">Full table</a></div>
+          <div class="standings-hdr"><span></span><span>School</span><span style="text-align:center;">W</span><span style="text-align:center;">L</span><span style="text-align:right;">PPG</span></div>
+          <div id="standings-list"></div>
+        </div>
+
+        <!-- Stat Leaders -->
+        <div class="sidebar-widget">
+          <div class="widget-hdr">Statistical Leaders</div>
+          <div class="sw-row">
+            <button class="sw-btn active" onclick="switchLeaders('pts',this)">PTS</button>
+            <button class="sw-btn" onclick="switchLeaders('reb',this)">REB</button>
+            <button class="sw-btn" onclick="switchLeaders('ast',this)">AST</button>
+            <button class="sw-btn" onclick="switchLeaders('stl',this)">STL</button>
+          </div>
+          <div id="leaders-list"></div>
+        </div>
+
+        <!-- Scout upsell -->
+        <div class="sidebar-widget" style="padding:0;overflow:hidden;border:1px solid var(--scout-border);">
+          <div style="background:var(--scout-subtle);padding:12px 15px 10px;">
+            <div style="font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--scout-accent);margin-bottom:6px;">Courtside Scout · $9/mo</div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--courtside-white);letter-spacing:.3px;line-height:1.1;margin-bottom:10px;">See deeper with Courtside Scout</div>
+            <div style="display:flex;flex-direction:column;gap:5px;margin-bottom:12px;">
+              <div style="font-size:11px;color:rgba(255,255,255,.65);display:flex;align-items:flex-start;gap:5px;"><span style="color:var(--scout-accent);font-weight:700;flex-shrink:0;">✓</span> AI scouting reports on every indexed player</div>
+              <div style="font-size:11px;color:rgba(255,255,255,.65);display:flex;align-items:flex-start;gap:5px;"><span style="color:var(--scout-accent);font-weight:700;flex-shrink:0;">✓</span> Player ratings, grades, and college projections</div>
+              <div style="font-size:11px;color:rgba(255,255,255,.65);display:flex;align-items:flex-start;gap:5px;"><span style="color:var(--scout-accent);font-weight:700;flex-shrink:0;">✓</span> Custom highlight reel builder</div>
+            </div>
+            <a href="scout.html" style="display:flex;align-items:center;justify-content:center;gap:5px;padding:9px 0;border-radius:5px;background:var(--scout-accent);color:#000;font-size:12px;font-weight:700;text-decoration:none;font-family:'DM Sans',sans-serif;">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              Upgrade to Scout — $9/mo
+            </a>
+          </div>
+        </div>
+
+        <!-- Film network status -->
+        <div class="sidebar-widget">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span class="pulse-dot" style="background:#22C55E;flex-shrink:0;"></span>
+            <div>
+              <div style="font-size:12px;font-weight:700;color:var(--text-primary);">Film Network</div>
+              <div style="font-size:11px;color:var(--text-secondary);">Connected · Last sync: just now</div>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <!-- Scout bottom banner -->
+    <div style="margin-top:32px;background:linear-gradient(135deg,var(--scout-subtle) 0%,transparent 100%);border:1px solid var(--scout-border);border-radius:10px;padding:32px 36px;display:flex;align-items:center;justify-content:space-between;gap:32px;flex-wrap:wrap;">
+      <div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:48px;line-height:1;color:var(--courtside-white);letter-spacing:.5px;margin-bottom:10px;">READY TO SCOUT DEEPER?</div>
+        <div style="font-size:14px;color:rgba(255,255,255,.55);line-height:1.6;max-width:480px;">Get AI profiles, player ratings, and a custom reel builder. The full picture on every Auckland player.</div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px;flex-shrink:0;">
+        <a href="scout.html" style="display:inline-flex;align-items:center;gap:7px;padding:14px 28px;border-radius:8px;background:var(--scout-accent);color:#000;font-size:14px;font-weight:700;text-decoration:none;font-family:'DM Sans',sans-serif;white-space:nowrap;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Upgrade to Scout — $9/mo
+        </a>
+        <span style="font-size:12px;color:var(--text-muted);">Bundle with Playbook for $19/mo — save $5</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- RANKINGS TAB -->
+  <div id="tab-rankings" class="tab-pane hidden">
+    <div style="padding-top:24px;">
+      <!-- Sub-tab pill switcher -->
+      <div style="display:flex;gap:4px;margin-bottom:20px;">
+        <button class="sw-btn active" id="rtab-teams-btn" onclick="switchRankTab('teams',this)" style="padding:7px 18px;font-size:13px;">Teams</button>
+        <button class="sw-btn" id="rtab-players-btn" onclick="switchRankTab('players',this)" style="padding:7px 18px;font-size:13px;">League Leaders</button>
+      </div>
+
+      <!-- TEAMS TABLE -->
+      <div id="rtab-teams">
+        <div style="background:var(--surface-1);border:1px solid var(--border-subtle);border-radius:8px;overflow:hidden;">
+          <table class="rank-table" style="width:100%;">
+            <thead>
+              <tr>
+                <th style="width:36px;">#</th>
+                <th>School</th>
+                <th style="width:36px;">W</th>
+                <th style="width:36px;">L</th>
+                <th style="width:60px;">Win%</th>
+                <th style="width:64px;">PPG</th>
+                <th style="width:72px;">OPP PPG</th>
+                <th style="width:48px;">Chg</th>
+              </tr>
+            </thead>
+            <tbody id="teams-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- PLAYERS TABLE -->
+      <div id="rtab-players" style="display:none;">
+        <div class="sec-label" style="margin-bottom:12px;">
+          League Leaders
+          <div class="sw-row" style="margin:0;">
+            <button class="sw-btn active" id="rank-pts-btn" onclick="switchRankStat('pts',this)">PTS</button>
+            <button class="sw-btn" onclick="switchRankStat('reb',this)">REB</button>
+            <button class="sw-btn" onclick="switchRankStat('ast',this)">AST</button>
+            <button class="sw-btn" onclick="switchRankStat('stl',this)">STL</button>
+            <button class="sw-btn" onclick="switchRankStat('blk',this)">BLK</button>
+          </div>
+        </div>
+        <div style="background:var(--surface-1);border:1px solid var(--border-subtle);border-radius:8px;overflow:hidden;">
+          <table class="rank-table" style="width:100%;">
+            <thead>
+              <tr><th style="width:36px;">#</th><th>Player</th><th>School</th><th style="width:48px;">Yr</th><th style="width:48px;">Pos</th><th style="width:56px;" id="rank-col-hdr">PTS</th><th style="width:40px;">GP</th></tr>
+            </thead>
+            <tbody id="rank-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PLAYERS TAB -->
+  <div id="tab-players" class="tab-pane hidden">
+    <div style="padding-top:24px;">
+      <div class="sec-label">All Players <span style="color:var(--text-muted);font-weight:400;text-transform:none;letter-spacing:0;">Auckland Division · 2026</span></div>
+      <div class="all-players-grid" id="all-players-grid"></div>
+    </div>
+  </div>
+
+  <!-- DISCOVER TAB -->
+  <div id="tab-discover" class="tab-pane hidden">
+    <div style="padding-top:24px;">
+      <!-- Mode pill switcher -->
+      <div style="display:flex;gap:4px;margin-bottom:20px;">
+        <button class="sw-btn active" id="disc-teams-btn" onclick="switchDiscoverMode('teams',this)" style="padding:7px 18px;font-size:13px;">Teams</button>
+        <button class="sw-btn" id="disc-players-btn" onclick="switchDiscoverMode('players',this)" style="padding:7px 18px;font-size:13px;">Players</button>
+      </div>
+
+      <!-- FIND TEAMS -->
+      <div id="disc-teams">
+        <div style="display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;">
+          <input id="disc-team-search" type="text" placeholder="Search school…"
+            style="flex:1;min-width:160px;padding:10px 14px;border-radius:6px;background:var(--surface-2);border:1px solid var(--border-subtle);color:var(--text-primary);font-size:13px;font-family:'DM Sans',sans-serif;outline:none;"
+            oninput="renderDiscoverTeams()" onfocus="this.style.borderColor='var(--purple-border)'" onblur="this.style.borderColor='var(--border-subtle)'">
+          <select id="disc-team-sort" onchange="renderDiscoverTeams()"
+            style="padding:0 12px;border-radius:6px;background:var(--surface-2);border:1px solid var(--border-subtle);color:var(--text-secondary);font-size:12px;font-family:'DM Sans',sans-serif;cursor:pointer;outline:none;">
+            <option value="wins">Sort: Wins</option>
+            <option value="ppg">Sort: PPG</option>
+            <option value="name">Sort: Name</option>
+          </select>
+        </div>
+        <div id="disc-teams-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;"></div>
+      </div>
+
+      <!-- FIND PLAYERS -->
+      <div id="disc-players" style="display:none;">
+        <div style="display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;">
+          <input id="disc-player-search" type="text" placeholder="Search player or school…"
+            style="flex:1;min-width:160px;padding:10px 14px;border-radius:6px;background:var(--surface-2);border:1px solid var(--border-subtle);color:var(--text-primary);font-size:13px;font-family:'DM Sans',sans-serif;outline:none;"
+            oninput="renderDiscoverPlayers()" onfocus="this.style.borderColor='var(--purple-border)'" onblur="this.style.borderColor='var(--border-subtle)'">
+          <select id="disc-pos" onchange="renderDiscoverPlayers()"
+            style="padding:0 12px;border-radius:6px;background:var(--surface-2);border:1px solid var(--border-subtle);color:var(--text-secondary);font-size:12px;font-family:'DM Sans',sans-serif;cursor:pointer;outline:none;">
+            <option value="">All Positions</option>
+            <option value="PG">PG</option><option value="SG">SG</option><option value="SF">SF</option><option value="PF">PF</option><option value="C">C</option>
+          </select>
+          <select id="disc-year" onchange="renderDiscoverPlayers()"
+            style="padding:0 12px;border-radius:6px;background:var(--surface-2);border:1px solid var(--border-subtle);color:var(--text-secondary);font-size:12px;font-family:'DM Sans',sans-serif;cursor:pointer;outline:none;">
+            <option value="">All Years</option>
+            <option value="Year 11">Year 11</option><option value="Year 12">Year 12</option><option value="Year 13">Year 13</option>
+          </select>
+          <select id="disc-psort" onchange="renderDiscoverPlayers()"
+            style="padding:0 12px;border-radius:6px;background:var(--surface-2);border:1px solid var(--border-subtle);color:var(--text-secondary);font-size:12px;font-family:'DM Sans',sans-serif;cursor:pointer;outline:none;">
+            <option value="ppg">Sort: PPG</option>
+            <option value="rpg">Sort: RPG</option>
+            <option value="apg">Sort: APG</option>
+          </select>
+        </div>
+        <div id="disc-players-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FILM TAB -->
+  <div id="tab-film" class="tab-pane hidden">
+
+    <!-- Hero -->
+    <div class="film-hero">
+      <div class="film-court-lines"></div>
+      <div class="film-spotlight"></div>
+      <div class="film-hero-content">
+        <div class="film-hero-tag">FREE · No Subscription Required</div>
+        <div class="film-headline">
+          <span class="ac">Study</span> <span class="wh">The Game.</span><br>
+          <span class="ac">Master</span> <span class="wh">Your Season.</span>
+        </div>
+        <div class="film-hero-bottom">
+          <div>
+            <div class="film-hero-desc">Upload game footage free. Courtside Film reads the video and tracks every stat. Upgrade to Playbook to unlock AI game plans, play tagging, and opponent breakdowns — all powered by your filmed footage.</div>
+            <div class="film-tier-pills">
+              <div class="film-tier-col">
+                <div class="film-tier-label free">✓ Film Tracks (Free)</div>
+                <div class="film-tier-item">Points · Rebounds · Assists</div>
+                <div class="film-tier-item">Steals · Blocks · Turnovers</div>
+              </div>
+              <div class="film-tier-col">
+                <div class="film-tier-label locked">🔒 Playbook Unlocks</div>
+                <div class="film-tier-item">Play tagging · Pattern search</div>
+                <div class="film-tier-item">Team footage · Reel builder</div>
+              </div>
+            </div>
+            <div class="film-hero-actions" style="margin-top:20px;">
+              <a href="https://courtside-film.fly.dev" target="_blank" class="film-open-btn">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>
+                Open Film Pipeline
+              </a>
+              <div class="film-indexed-badge">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                12 games indexed this week
+              </div>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:2px;border-radius:8px;overflow:hidden;flex-shrink:0;width:280px;">
+            <div style="background:var(--surface-2);padding:18px;text-align:center;border:1px solid var(--border-subtle);">
+              <div class="film-stat-num" style="color:var(--purple-accent);" data-count="47">47</div>
+              <div class="film-stat-lbl">Games Filmed</div>
+            </div>
+            <div style="background:var(--surface-2);padding:18px;text-align:center;border:1px solid var(--border-subtle);">
+              <div class="film-stat-num" style="color:#F59E0B;font-size:36px;" data-count="8400">8.4K</div>
+              <div class="film-stat-lbl">Stat Entries</div>
+            </div>
+            <div style="background:var(--surface-2);padding:18px;text-align:center;border:1px solid var(--border-subtle);">
+              <div class="film-stat-num" style="color:#F59E0B;" data-count="8">8</div>
+              <div class="film-stat-lbl">Schools</div>
+            </div>
+            <div style="background:var(--surface-2);padding:18px;text-align:center;border:1px solid var(--border-subtle);">
+              <div class="film-stat-num" style="color:var(--purple-accent);" data-count="38">38</div>
+              <div class="film-stat-lbl">Players Indexed</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Playbook promo strip -->
+    <div class="film-pb-promo">
+      <div style="width:52px;height:52px;border-radius:12px;background:linear-gradient(135deg,#1D4ED8,var(--playbook-accent));display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+      </div>
+      <div style="flex:1;">
+        <div style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--playbook-accent);margin-bottom:4px;">Unlock More From Your Filmed Footage</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--courtside-white);letter-spacing:.5px;margin-bottom:8px;">Add Courtside Playbook</div>
+        <div style="font-size:12px;color:rgba(255,255,255,.5);margin-bottom:10px;">Film is the foundation — Playbook is what coaches build on top of it.</div>
+        <div style="display:flex;gap:14px;flex-wrap:wrap;">
+          <span style="font-size:12px;color:rgba(255,255,255,.65);display:flex;align-items:center;gap:4px;"><span style="color:var(--playbook-accent);font-weight:700;">✓</span> AI game plans &amp; opponent breakdowns</span>
+          <span style="font-size:12px;color:rgba(255,255,255,.65);display:flex;align-items:center;gap:4px;"><span style="color:var(--playbook-accent);font-weight:700;">✓</span> Play tagging &amp; pattern search</span>
+          <span style="font-size:12px;color:rgba(255,255,255,.65);display:flex;align-items:center;gap:4px;"><span style="color:var(--playbook-accent);font-weight:700;">✓</span> Coach reel builder</span>
+        </div>
+      </div>
+      <a href="playbook.html" style="flex-shrink:0;padding:12px 22px;border-radius:8px;background:linear-gradient(135deg,#1D4ED8,var(--playbook-accent));color:#fff;font-size:13px;font-weight:700;text-decoration:none;white-space:nowrap;display:flex;align-items:center;gap:6px;">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+        Get Playbook — $15/mo
+      </a>
+    </div>
+
+    <!-- Recently filmed -->
+    <div class="sec-label">Recently Filmed Games</div>
+    <div class="film-games-grid">
+      <div class="film-game-card" onclick="window.open('https://courtside-film.fly.dev','_blank')">
+        <div class="film-game-thumb" style="background:linear-gradient(135deg,#001f5b99,#1c3a8c66,#111);">
+          <img src="logos/ags.jpg" alt="AGS" style="width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid rgba(255,255,255,0.2);">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:#fff;letter-spacing:1px;">78–62</div>
+          <img src="logos/ros.png" alt="ROS" style="width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid rgba(255,255,255,0.2);">
+          <div style="position:absolute;top:8px;right:10px;font-size:9px;font-weight:700;color:var(--purple-accent);letter-spacing:.06em;display:flex;align-items:center;gap:4px;"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>STATS RECORDED</div>
+          <div class="film-game-play-overlay"><svg width="28" height="28" viewBox="0 0 24 24" fill="rgba(255,255,255,.8)"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
+        </div>
+        <div class="film-game-body">
+          <div style="flex:1;"><div class="film-game-name">Auckland Grammar vs Rosmini College</div><div class="film-game-meta">Apr 8 · PTS / REB / AST / STL / BLK tracked · 1h 34m</div></div>
+          <a href="https://courtside-film.fly.dev" target="_blank" class="film-view-btn">View Stats</a>
+        </div>
+      </div>
+      <div class="film-game-card" onclick="window.open('https://courtside-film.fly.dev','_blank')">
+        <div class="film-game-thumb" style="background:linear-gradient(135deg,#1D4ED899,#005c1a66,#111);">
+          <img src="logos/stk.jpg" alt="STK" style="width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid rgba(255,255,255,0.2);">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:#fff;letter-spacing:1px;">61–58</div>
+          <img src="logos/dls.jpg" alt="DLS" style="width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid rgba(255,255,255,0.2);">
+          <div style="position:absolute;top:8px;right:10px;font-size:9px;font-weight:700;color:var(--purple-accent);letter-spacing:.06em;display:flex;align-items:center;gap:4px;"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>STATS RECORDED</div>
+          <div class="film-game-play-overlay"><svg width="28" height="28" viewBox="0 0 24 24" fill="rgba(255,255,255,.8)"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
+        </div>
+        <div class="film-game-body">
+          <div style="flex:1;"><div class="film-game-name">St Kentigern vs Dilworth School</div><div class="film-game-meta">Apr 7 · PTS / REB / AST / STL / BLK tracked · 1h 29m</div></div>
+          <a href="https://courtside-film.fly.dev" target="_blank" class="film-view-btn">View Stats</a>
+        </div>
+      </div>
+      <div class="film-game-card" onclick="window.open('https://courtside-film.fly.dev','_blank')">
+        <div class="film-game-thumb" style="background:linear-gradient(135deg,#cc000099,#001f5b66,#111);">
+          <img src="logos/wbh.jpg" alt="WBH" style="width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid rgba(255,255,255,0.2);">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:#fff;letter-spacing:1px;">55–67</div>
+          <img src="logos/ags.jpg" alt="AGS" style="width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid rgba(255,255,255,0.2);">
+          <div style="position:absolute;top:8px;right:10px;font-size:9px;font-weight:700;color:var(--purple-accent);letter-spacing:.06em;display:flex;align-items:center;gap:4px;"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>STATS RECORDED</div>
+          <div class="film-game-play-overlay"><svg width="28" height="28" viewBox="0 0 24 24" fill="rgba(255,255,255,.8)"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
+        </div>
+        <div class="film-game-body">
+          <div style="flex:1;"><div class="film-game-name">Westlake Boys vs Auckland Grammar</div><div class="film-game-meta">Apr 5 · PTS / REB / AST / STL / BLK tracked · 1h 41m</div></div>
+          <a href="https://courtside-film.fly.dev" target="_blank" class="film-view-btn">View Stats</a>
+        </div>
+      </div>
+      <div class="film-game-card" onclick="window.open('https://courtside-film.fly.dev','_blank')">
+        <div class="film-game-thumb" style="background:linear-gradient(135deg,#14284a99,#1a4a9c66,#111);">
+          <img src="logos/spc.jpg" alt="SPC" style="width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid rgba(255,255,255,0.2);">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:#fff;letter-spacing:1px;">63–71</div>
+          <img src="logos/shc.jpg" alt="SHC" style="width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid rgba(255,255,255,0.2);">
+          <div style="position:absolute;top:8px;right:10px;font-size:9px;font-weight:700;color:var(--purple-accent);letter-spacing:.06em;display:flex;align-items:center;gap:4px;"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>STATS RECORDED</div>
+          <div class="film-game-play-overlay"><svg width="28" height="28" viewBox="0 0 24 24" fill="rgba(255,255,255,.8)"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
+        </div>
+        <div class="film-game-body">
+          <div style="flex:1;"><div class="film-game-name">St Peter's College vs Sacred Heart College</div><div class="film-game-meta">Apr 3 · PTS / REB / AST / STL / BLK tracked · 1h 22m</div></div>
+          <a href="https://courtside-film.fly.dev" target="_blank" class="film-view-btn">View Stats</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tier comparison: Film vs Playbook -->
+    <div class="sec-label">Film vs Playbook</div>
+    <div class="tier-table" style="grid-template-columns:1fr 1fr;">
+      <div class="tier-col">
+        <span class="tier-tag" style="background:var(--purple-subtle);border:1px solid var(--purple-border);color:var(--purple-accent);">Film — Free</span>
+        <div class="tier-heading">Basic Game Stats</div>
+        <div class="tier-price">Free forever · No account required</div>
+        <div class="tier-item"><span style="color:var(--purple-accent);">✓</span> Points (PTS)</div>
+        <div class="tier-item"><span style="color:var(--purple-accent);">✓</span> Rebounds (REB)</div>
+        <div class="tier-item"><span style="color:var(--purple-accent);">✓</span> Assists (AST)</div>
+        <div class="tier-item"><span style="color:var(--purple-accent);">✓</span> Steals (STL)</div>
+        <div class="tier-item"><span style="color:var(--purple-accent);">✓</span> Blocks (BLK)</div>
+        <div class="tier-item"><span style="color:var(--purple-accent);">✓</span> Turnovers (TO)</div>
+        <div class="tier-item"><span style="color:var(--purple-accent);">✓</span> Network stats &amp; standings</div>
+      </div>
+      <div class="tier-col" style="border-left:1px solid var(--playbook-border);">
+        <div class="tier-popular">For Coaches</div>
+        <span class="tier-tag" style="background:var(--playbook-subtle);border:1px solid var(--playbook-border);color:var(--playbook-accent);">Playbook — $15/mo</span>
+        <div class="tier-heading">Coach Intelligence</div>
+        <div class="tier-price">Everything in Film, plus:</div>
+        <div class="tier-item"><span style="color:var(--playbook-accent);">✓</span> AI opponent reports &amp; game plans</div>
+        <div class="tier-item"><span style="color:var(--playbook-accent);">✓</span> Play tagging &amp; timestamps</div>
+        <div class="tier-item"><span style="color:var(--playbook-accent);">✓</span> Team footage reels</div>
+        <div class="tier-item"><span style="color:var(--playbook-accent);">✓</span> Pattern search</div>
+        <div class="tier-item"><span style="color:var(--playbook-accent);">✓</span> Game plan generator</div>
+        <div class="tier-item"><span style="color:var(--playbook-accent);">✓</span> Coach reel builder</div>
+      </div>
+    </div>
+
+    <!-- Playbook upsell card -->
+    <div style="background:linear-gradient(135deg,rgba(29,78,216,0.18),rgba(99,102,241,0.12));border:1px solid var(--playbook-border);border-radius:10px;padding:28px 28px 24px;margin-bottom:24px;text-align:center;">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:32px;color:var(--courtside-white);letter-spacing:.5px;margin-bottom:8px;">Ready to Coach Smarter?</div>
+      <div style="font-size:13px;color:rgba(255,255,255,.55);max-width:460px;margin:0 auto 18px;line-height:1.6;">Your filmed footage powers the whole Playbook system. AI reads your games, builds opponent breakdowns, and generates game plans — all from the footage you've already uploaded.</div>
+      <div style="display:flex;justify-content:center;gap:24px;flex-wrap:wrap;margin-bottom:20px;">
+        <span style="font-size:12px;color:rgba(255,255,255,.7);display:flex;align-items:center;gap:5px;"><span style="color:var(--playbook-accent);font-weight:700;font-size:14px;">✓</span> AI game plans from your own footage</span>
+        <span style="font-size:12px;color:rgba(255,255,255,.7);display:flex;align-items:center;gap:5px;"><span style="color:var(--playbook-accent);font-weight:700;font-size:14px;">✓</span> Opponent tendency reports in minutes</span>
+        <span style="font-size:12px;color:rgba(255,255,255,.7);display:flex;align-items:center;gap:5px;"><span style="color:var(--playbook-accent);font-weight:700;font-size:14px;">✓</span> Cancel anytime · No lock-in</span>
+      </div>
+      <a href="playbook.html" style="display:inline-flex;align-items:center;gap:7px;padding:13px 28px;border-radius:8px;background:linear-gradient(135deg,#1D4ED8,var(--playbook-accent));color:#fff;font-size:14px;font-weight:700;text-decoration:none;letter-spacing:.02em;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+        Get Playbook — $15/mo
+      </a>
+    </div>
+
+    <!-- Upload CTA -->
+    <div class="film-upload-cta" onclick="window.open('https://courtside-film.fly.dev','_blank')">
+      <div style="margin-bottom:12px;">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--purple-accent)" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="2"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/></svg>
+      </div>
+      <div class="film-upload-headline">Upload Game Footage</div>
+      <div class="film-upload-sub">Record stats from a new game — free, no account required. Every film uploaded powers the whole network.</div>
+      <button class="film-upload-btn" onclick="event.stopPropagation();window.open('https://courtside-film.fly.dev','_blank')">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>
+        Open Film Pipeline
+      </button>
+    </div>
+
+  </div><!-- /tab-film -->
+
+</div><!-- /page-wrap -->
+
+<!-- PLAYER PROFILE OVERLAY -->
+<div class="profile-overlay" id="profile-overlay" onclick="closeProfile(event)">
+  <div class="profile-modal">
+    <div class="profile-modal-hdr" id="profile-header">
+      <div class="profile-modal-hdr-grad"></div>
+      <div class="profile-modal-hdr-content" id="profile-header-content"></div>
+      <button class="profile-close" onclick="document.getElementById('profile-overlay').classList.remove('active')">✕</button>
+    </div>
+    <div class="profile-body" id="profile-body"></div>
+  </div>
+</div>
+
+<!-- MOBILE BAR -->
+<div class="mobile-bar">
+  <button class="mobile-bar-btn active" onclick="switchTab('home',this)" id="mb-home">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Home
+  </button>
+  <button class="mobile-bar-btn" onclick="switchTab('players',this)" id="mb-players">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Players
+  </button>
+  <button class="mobile-bar-btn" onclick="switchTab('film',this)" id="mb-film">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/></svg>Film
+  </button>
+  <button class="mobile-bar-btn" onclick="window.location='scout.html'">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>Scout
+  </button>
+  <button class="mobile-bar-btn" onclick="window.location='playbook.html'">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>Playbook
+  </button>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════
+// DATA
+// ═══════════════════════════════════════════════════════
+const players = [
+  { id:1, number:"3", initials:"TN", name:"Tane Ngata", school:"Auckland Grammar", schoolColor:"#1a4a8c", position:"PG", height:'6\'1"', year:"Year 13", ppg:18.4, rpg:4.2, apg:7.1, stl:2.1, blk:0.3, stats:{pts:18.4,reb:4.2,ast:7.1,stl:2.1,blk:0.3,to:2.8,fg:"47.2",three:"38.4",ft:"82.1"}, gamelog:[{opp:"vs Rosmini College",pts:22,reb:5,ast:8,stl:3,blk:0,to:2},{opp:"vs Mt Albert",pts:17,reb:4,ast:6,stl:1,blk:0,to:3},{opp:"vs St Kentigern",pts:24,reb:3,ast:9,stl:2,blk:1,to:1},{opp:"vs Dilworth",pts:14,reb:5,ast:7,stl:2,blk:0,to:4},{opp:"vs Westlake Boys",pts:19,reb:4,ast:8,stl:3,blk:0,to:2},{opp:"vs Sacred Heart",pts:14,reb:3,ast:6,stl:2,blk:0,to:3}], scouting:"Ngata is the most complete point guard in the Auckland Premier Grade. Sub-3.0 TO average with 7.1 APG speaks to exceptional decision-making for a Year 13." },
+  { id:2, number:"23", initials:"JH", name:"Jaxon Heremaia", school:"Rosmini College", schoolColor:"#9b1c1c", position:"SG", height:'6\'3"', year:"Year 12", ppg:21.2, rpg:5.8, apg:3.4, stl:1.8, blk:0.6, stats:{pts:21.2,reb:5.8,ast:3.4,stl:1.8,blk:0.6,to:2.3,fg:"49.1",three:"41.7",ft:"79.4"}, gamelog:[{opp:"vs Auckland Grammar",pts:28,reb:7,ast:4,stl:2,blk:1,to:2},{opp:"vs Mt Albert",pts:19,reb:5,ast:2,stl:1,blk:0,to:3},{opp:"vs St Kentigern",pts:24,reb:6,ast:4,stl:2,blk:1,to:1},{opp:"vs Dilworth",pts:18,reb:4,ast:3,stl:2,blk:0,to:3},{opp:"vs Westlake Boys",pts:22,reb:7,ast:5,stl:3,blk:1,to:2},{opp:"vs Marist",pts:16,reb:5,ast:3,stl:1,blk:1,to:2}], scouting:"Heremaia is a walking bucket at the Year 12 level. His 41.7% from three on high volume is the standout stat in the division." },
+  { id:3, number:"14", initials:"MT", name:"Marcus Tuilagi", school:"Mt Albert Grammar", schoolColor:"#1a4a8c", position:"SF", height:'6\'6"', year:"Year 13", ppg:16.7, rpg:8.3, apg:2.1, stl:1.4, blk:1.9, stats:{pts:16.7,reb:8.3,ast:2.1,stl:1.4,blk:1.9,to:2.0,fg:"53.8",three:"29.2",ft:"67.3"}, gamelog:[{opp:"vs Auckland Grammar",pts:20,reb:10,ast:2,stl:2,blk:3,to:1},{opp:"vs Rosmini",pts:14,reb:8,ast:3,stl:1,blk:2,to:2},{opp:"vs St Kentigern",pts:18,reb:9,ast:2,stl:1,blk:2,to:3},{opp:"vs Dilworth",pts:15,reb:7,ast:1,stl:2,blk:1,to:2},{opp:"vs Sacred Heart",pts:19,reb:8,ast:3,stl:1,blk:2,to:2},{opp:"vs Westlake Boys",pts:14,reb:8,ast:2,stl:1,blk:1,to:2}], scouting:"Best two-way wing prospect in the division. His 1.9 blocks per game from SF is remarkable — projects as a versatile defender at the next level." },
+  { id:4, number:"42", initials:"CR", name:"Callum Reid", school:"St Kentigern College", schoolColor:"#6b1a1a", position:"PF", height:'6\'7"', year:"Year 12", ppg:14.5, rpg:9.1, apg:1.8, stl:0.9, blk:2.4, stats:{pts:14.5,reb:9.1,ast:1.8,stl:0.9,blk:2.4,to:1.7,fg:"58.2",three:"0.0",ft:"61.8"}, gamelog:[{opp:"vs Auckland Grammar",pts:16,reb:11,ast:2,stl:1,blk:3,to:1},{opp:"vs Rosmini",pts:12,reb:9,ast:1,stl:0,blk:2,to:2},{opp:"vs Mt Albert",pts:18,reb:10,ast:2,stl:1,blk:3,to:2},{opp:"vs Dilworth",pts:14,reb:8,ast:2,stl:1,blk:2,to:1},{opp:"vs Sacred Heart",pts:12,reb:9,ast:2,stl:1,blk:2,to:2},{opp:"vs Westlake Boys",pts:15,reb:8,ast:2,stl:1,blk:2,to:2}], scouting:"Most physically imposing player in the Auckland division. 58.2% FG reflects elite post skill set and outstanding hands." },
+  { id:5, number:"55", initials:"EP", name:"Ethan Parata", school:"Dilworth School", schoolColor:"#005c1a", position:"C", height:'6\'10"', year:"Year 13", ppg:12.3, rpg:11.2, apg:1.2, stl:0.7, blk:3.1, stats:{pts:12.3,reb:11.2,ast:1.2,stl:0.7,blk:3.1,to:1.5,fg:"62.4",three:"0.0",ft:"55.9"}, gamelog:[{opp:"vs Auckland Grammar",pts:14,reb:13,ast:1,stl:1,blk:4,to:2},{opp:"vs Rosmini",pts:10,reb:11,ast:1,stl:0,blk:3,to:1},{opp:"vs Mt Albert",pts:15,reb:12,ast:2,stl:1,blk:4,to:2},{opp:"vs St Kentigern",pts:11,reb:10,ast:1,stl:1,blk:2,to:1},{opp:"vs Sacred Heart",pts:13,reb:11,ast:1,stl:0,blk:3,to:1},{opp:"vs Westlake Boys",pts:11,reb:10,ast:1,stl:1,blk:3,to:2}], scouting:"Rarest commodity in NZ high school basketball — a genuine big man with modern footwork and soft hands at 6'10\"." },
+  { id:6, number:"7", initials:"LF", name:"Liam Faleolo", school:"Auckland Grammar", schoolColor:"#1a4a8c", position:"SG", height:'6\'2"', year:"Year 11", ppg:19.8, rpg:4.5, apg:5.3, stl:2.4, blk:0.4, stats:{pts:19.8,reb:4.5,ast:5.3,stl:2.4,blk:0.4,to:3.1,fg:"44.8",three:"36.9",ft:"87.2"}, gamelog:[{opp:"vs Rosmini",pts:26,reb:5,ast:6,stl:3,blk:1,to:3},{opp:"vs Mt Albert",pts:18,reb:4,ast:5,stl:2,blk:0,to:4},{opp:"vs St Kentigern",pts:21,reb:5,ast:5,stl:3,blk:0,to:2},{opp:"vs Dilworth",pts:17,reb:4,ast:6,stl:2,blk:1,to:3},{opp:"vs Sacred Heart",pts:22,reb:5,ast:5,stl:2,blk:0,to:3},{opp:"vs Westlake Boys",pts:19,reb:4,ast:5,stl:2,blk:1,to:3}], scouting:"Most exciting Year 11 in the Auckland competition — full stop. Faleolo at 16 is already putting up numbers rivalling the best Year 13 guards." },
+  { id:7, number:"11", initials:"NH", name:"Noah Harawira", school:"Rosmini College", schoolColor:"#9b1c1c", position:"SF", height:'6\'5"', year:"Year 13", ppg:15.9, rpg:7.4, apg:3.7, stl:1.6, blk:1.1, stats:{pts:15.9,reb:7.4,ast:3.7,stl:1.6,blk:1.1,to:2.2,fg:"46.3",three:"33.1",ft:"74.5"}, gamelog:[{opp:"vs Auckland Grammar",pts:18,reb:8,ast:4,stl:2,blk:1,to:2},{opp:"vs Mt Albert",pts:14,reb:7,ast:3,stl:1,blk:1,to:2},{opp:"vs St Kentigern",pts:20,reb:8,ast:5,stl:2,blk:2,to:3},{opp:"vs Dilworth",pts:13,reb:7,ast:3,stl:2,blk:1,to:2},{opp:"vs Sacred Heart",pts:17,reb:8,ast:4,stl:1,blk:1,to:2},{opp:"vs Westlake Boys",pts:14,reb:6,ast:3,stl:2,blk:1,to:2}], scouting:"Versatile wing who can guard three positions. Defensively tenacious — projects well as a utility wing at the next level." },
+  { id:8, number:"0", initials:"JT", name:"Jordan Taufa", school:"St Kentigern College", schoolColor:"#6b1a1a", position:"PG", height:'6\'0"', year:"Year 12", ppg:17.3, rpg:3.8, apg:6.9, stl:2.6, blk:0.2, stats:{pts:17.3,reb:3.8,ast:6.9,stl:2.6,blk:0.2,to:2.4,fg:"43.7",three:"35.8",ft:"84.6"}, gamelog:[{opp:"vs Auckland Grammar",pts:20,reb:4,ast:8,stl:3,blk:0,to:2},{opp:"vs Rosmini",pts:16,reb:3,ast:7,stl:2,blk:0,to:3},{opp:"vs Mt Albert",pts:18,reb:4,ast:6,stl:3,blk:0,to:2},{opp:"vs Dilworth",pts:15,reb:4,ast:7,stl:3,blk:1,to:2},{opp:"vs Sacred Heart",pts:19,reb:3,ast:8,stl:2,blk:0,to:3},{opp:"vs Westlake Boys",pts:16,reb:4,ast:6,stl:3,blk:0,to:2}], scouting:"Top defensive point guard in the division with 2.6 steals per game leading all guards at his position." }
+];
+
+const articles = [
+  { id:1, type:'featured', category:'recap', tag:'GAME RECAP', logoAbbr:'AGS', title:"Grammar's Dynamic Duo Combine for 45 in Dominant Rout", blurb:"Ngata orchestrated the offence with 22 pts and 8 assists while Faleolo torched the nets for 23 including four three-pointers.", players:[1,6], heroNum:"78", statPill:"45 COMBINED · 4 3PM", time:"2h ago", views:241 },
+  { id:2, type:'compile', category:'compile', tag:'COMBINED', logoAbbr:'AGS', title:"Ngata & Faleolo", context:"vs Rosmini College", bigStat:"45", bigStatLabel:"Combined Points", breakdown:"Ngata: 22 PTS / 8 AST | Faleolo: 23 PTS / 4 3PM", players:[1,6] },
+  { id:3, type:'article', category:'recap', tag:'SPOTLIGHT', logoAbbr:'ROS', title:"Heremaia Erupts for Season-High 28 in Rosmini Thriller", blurb:"The Year 12 SG hit six from downtown as Rosmini edged MAGS 71–68. His 41.7% three-point rate now leads the division.", statPill:"28 PTS · 6 3PM", player:2, time:"1d ago", views:187 },
+  { id:4, type:'compile', category:'compile', tag:'FRONTCOURT', logoAbbr:'DIL', title:"Parata & Reid", context:"Combined frontcourt dominance", bigStat:"7", bigStatLabel:"Blocks in one game", breakdown:"Parata: 4 BLK / 13 REB | Reid: 3 BLK / 11 REB", players:[5,4] },
+  { id:5, type:'article', category:'feature', tag:'FEATURE', logoAbbr:'AGS', title:"The Year 11 Phenom: Inside Faleolo's Breakout Season", blurb:"At 16, the Auckland Grammar guard is already the most talked-about player in the Auckland competition. We break down what makes him special.", player:6, time:"3d ago", views:512 },
+  { id:6, type:'article', category:'statwatch', tag:'STAT WATCH', logoAbbr:'STK', title:"Taufa Records 8-Assist Performance in Week 6", blurb:"St Kentigern's point guard leads all Auckland PGs in assists per game. His 2.9 assist-to-turnover ratio is the best at his position.", statPill:"8 AST · 0 TO", player:8, time:"3d ago", views:134 },
+  { id:7, type:'compile', category:'compile', tag:'WINGS', logoAbbr:'MAGS', title:"Tuilagi & Harawira", context:"MAGS vs Rosmini — Week 5", bigStat:"32", bigStatLabel:"Combined Points", breakdown:"Tuilagi: 18 PTS / 10 REB | Harawira: 14 PTS / 7 REB", players:[3,7] },
+  { id:8, type:'article', category:'feature', tag:'WEEK IN REVIEW', logoAbbr:'AGS', title:"Week 6 Top Moments: Five Best Plays from Auckland Division", blurb:"From Parata's 4-block shutdown to Faleolo's buzzer three in transition — we rank the five plays that had the division talking.", player:6, time:"4d ago", views:389 }
+];
+
+// ─── SCHOOL MASTER DATA ───
+const schools = {
+  AGS:  { name:"Auckland Grammar",        abbr:"AGS",  color:"#001f5b", logo:"logos/ags.jpg" },
+  ROS:  { name:"Rosmini College",         abbr:"ROS",  color:"#1c3a8c", logo:"logos/ros.png" },
+  STK:  { name:"St Kentigern",            abbr:"STK",  color:"#1D4ED8", logo:"logos/stk.jpg" },
+  DIL:  { name:"Dilworth School",         abbr:"DIL",  color:"#005c1a", logo:"logos/dls.jpg" },
+  SPC:  { name:"St Peter's College",      abbr:"SPC",  color:"#14284a", logo:"logos/spc.jpg" },
+  MAGS: { name:"Mt Albert Grammar",       abbr:"MAGS", color:"#1a4a8c", logo:"logos/ran.jpg" },
+  WBH:  { name:"Westlake Boys",           abbr:"WBH",  color:"#cc0000", logo:"logos/wbh.jpg" },
+  SHC:  { name:"Sacred Heart College",    abbr:"SHC",  color:"#1a4a9c", logo:"logos/shc.jpg" },
+};
+function schoolLogo(abbr, size) {
+  const s = schools[abbr] || { color:'#333', logo:'', abbr };
+  const px = size==='sm'?28:size==='lg'?52:40;
+  return s.logo
+    ? `<div style="width:${px}px;height:${px}px;border-radius:50%;overflow:hidden;background:${s.color};border:1.5px solid rgba(255,255,255,0.15);flex-shrink:0;"><img src="${s.logo}" alt="${abbr}" style="width:100%;height:100%;object-fit:cover;"></div>`
+    : `<div style="width:${px}px;height:${px}px;border-radius:50%;background:${s.color};display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:${px*0.32}px;color:#fff;flex-shrink:0;">${abbr}</div>`;
+}
+
+const games = [
+  { teamA:"Auckland Grammar",  colorA:"#001f5b", abbrA:"AGS",  scoreA:78, teamB:"Rosmini College", colorB:"#1c3a8c", abbrB:"ROS",  scoreB:62, status:"FINAL" },
+  { teamA:"St Kentigern",      colorA:"#1D4ED8", abbrA:"STK",  scoreA:61, teamB:"Dilworth School", colorB:"#005c1a", abbrB:"DIL",  scoreB:58, status:"FINAL" },
+  { teamA:"Sacred Heart",      colorA:"#1a4a9c", abbrA:"SHC",  scoreA:69, teamB:"Auckland Grammar",colorB:"#001f5b", abbrB:"AGS",  scoreB:72, status:"FINAL" },
+];
+const standings = [
+  { school:"Auckland Grammar",   abbr:"AGS",  color:"#001f5b", w:8, l:1, ppg:72.4, oppPpg:58.1, prev:1 },
+  { school:"Rosmini College",    abbr:"ROS",  color:"#1c3a8c", w:7, l:2, ppg:69.8, oppPpg:60.3, prev:3 },
+  { school:"St Kentigern",       abbr:"STK",  color:"#1D4ED8", w:5, l:4, ppg:65.2, oppPpg:63.8, prev:2 },
+  { school:"Dilworth School",    abbr:"DIL",  color:"#005c1a", w:4, l:5, ppg:63.1, oppPpg:64.5, prev:4 },
+  { school:"Mt Albert Grammar",  abbr:"MAGS", color:"#1a4a8c", w:3, l:6, ppg:61.7, oppPpg:66.2, prev:5 },
+  { school:"St Peter's College", abbr:"SPC",  color:"#14284a", w:3, l:6, ppg:60.4, oppPpg:67.1, prev:6 },
+  { school:"Westlake Boys",      abbr:"WBH",  color:"#cc0000", w:2, l:7, ppg:58.9, oppPpg:69.3, prev:7 },
+  { school:"Sacred Heart",       abbr:"SHC",  color:"#1a4a9c", w:1, l:8, ppg:55.2, oppPpg:71.8, prev:9 },
+];
+const discoverMoments = [
+  { type:'HIGHLIGHT', player:6, stat:'26 PTS · 4 3PM', label:'Faleolo', context:'vs Rosmini', views:'512', featured:true },
+  { type:'BLOCK',     player:5, stat:'4 BLK · 13 REB', label:'Parata',   context:'vs Grammar',   views:'341' },
+  { type:'PLAY',      player:1, stat:'8 AST · 0 TO',   label:'Ngata',    context:'vs Mt Albert', views:'287' },
+  { type:'BUCKET',    player:2, stat:'28 PTS · 6 3PM', label:'Heremaia', context:'vs Mt Albert', views:'412' },
+  { type:'DIME',      player:8, stat:'8 AST · 3 STL',  label:'Taufa',    context:'vs Grammar',   views:'198' },
+  { type:'WING',      player:3, stat:'20 PTS · 3 BLK', label:'Tuilagi',  context:'vs Grammar',   views:'223' },
+  { type:'POST',      player:4, stat:'18 PTS · 11 REB',label:'Reid',     context:'vs Mt Albert', views:'176' },
+  { type:'GAME',      player:7, stat:'20 PTS · 8 REB', label:'Harawira', context:'vs Grammar',   views:'209' },
+  { type:'TRIPLE',    player:2, stat:'24 PTS · 4 3PM', label:'Heremaia', context:'vs STK',       views:'318' },
+  { type:'CHASE',     player:6, stat:'22 PTS · 6 AST', label:'Faleolo',  context:'vs MAGS',       views:'447' },
+  { type:'ANCHOR',    player:5, stat:'15 PTS · 12 REB',label:'Parata',   context:'vs ROS',       views:'164' },
+];
+
+// ═══ STATE ═══
+let currentTab = 'home';
+let feedFilter = 'all';
+let leaderStat = 'pts';
+let rankStat   = 'pts';
+
+// ═══ HELPERS ═══
+const getPlayer = id => players.find(p => p.id === id);
+const schoolInits = name => name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,3);
+
+function hexDiv(color, initials, size='md') {
+  const dims = {sm:'32px;height:37px;font-size:10px',md:'48px;height:55px;font-size:14px',lg:'64px;height:74px;font-size:19px'};
+  const d = dims[size] || dims.md;
+  return `<div class="hex hex-${size}" style="width:${d.split(';')[0]};background:${color};">${initials}</div>`;
+}
+
+// ═══ TAB SWITCHER ═══
+function switchTab(tab, el) {
+  currentTab = tab;
+  document.querySelectorAll('.tab-pane').forEach(p => p.classList.add('hidden'));
+  document.getElementById('tab-'+tab).classList.remove('hidden');
+  document.querySelectorAll('.cs-nav-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.mobile-bar-btn').forEach(t => t.classList.remove('active'));
+  const navBtn = document.getElementById('ntab-'+tab);
+  if (navBtn) navBtn.classList.add('active');
+  if (el && el !== navBtn) el.classList.add('active');
+  if (tab === 'rankings') { renderTeamsTable(); renderRankings(rankStat); }
+  if (tab === 'players')  renderAllPlayers();
+  if (tab === 'discover') { renderDiscoverTeams(); renderDiscoverPlayers(); }
+}
+
+// ═══ TICKER ═══
+function renderTicker() {
+  const items = games.map(g => {
+    const aW = g.scoreA > g.scoreB;
+    return `<div class="ticker-item">
+      <span class="t-status ${g.status==='LIVE'?'live':''}">` +
+      (g.status==='LIVE'?'● LIVE':'FINAL') + `</span>
+      <div class="t-team">
+        ${schoolLogo(g.abbrA,'sm')}
+        <span class="t-abbr">${g.abbrA}</span>
+        <span class="t-score ${aW?'win':'lose'}">${g.scoreA}</span>
+      </div>
+      <span class="t-sep">–</span>
+      <div class="t-team">
+        <span class="t-score ${!aW?'win':'lose'}">${g.scoreB}</span>
+        <span class="t-abbr">${g.abbrB}</span>
+        ${schoolLogo(g.abbrB,'sm')}
+      </div>
+    </div>`;
+  }).join('');
+  const track = document.getElementById('ticker-track');
+  track.innerHTML = items + items; // duplicate for seamless loop
+}
+
+// ═══ HERO ═══
+function renderHero() {
+  const featured = articles.find(a => a.type === 'featured');
+  const sideArts = articles.filter(a => a.type !== 'featured' && a.type !== 'compile').slice(0,3);
+  if (!featured) return;
+  const p = featured.players ? getPlayer(featured.players[0]) : null;
+  const color = p ? p.schoolColor : '#4C1D95';
+
+  const sidesHtml = sideArts.map(a => {
+    const sp = a.player ? getPlayer(a.player) : (a.players ? getPlayer(a.players[0]) : null);
+    const sc = sp ? sp.schoolColor : '#4C1D95';
+    return `<div class="hero-side" style="background:linear-gradient(145deg,${sc}88,${sc}33,#111);" onclick="openProfile(${sp?sp.id:0})">
+      <div class="hero-grad"></div>
+      <div class="hs-tag" style="position:relative;z-index:1;">${a.tag}</div>
+      <div class="hs-headline">${a.title}</div>
+      ${a.statPill ? `<div class="hs-stat">${a.statPill}</div>` : ''}
+    </div>`;
+  }).join('');
+
+  document.getElementById('hero-section').innerHTML = `
+    <div class="hero-main" style="background:linear-gradient(145deg,${color}cc,${color}44,#0A0020);">
+      <div class="hero-bg-num">${featured.heroNum||''}</div>
+      <div class="hero-grad"></div>
+      <div class="hero-content">
+        <div class="hero-tag">${featured.tag}</div>
+        <div class="hero-headline">${featured.title}</div>
+        <div class="hero-blurb">${featured.blurb}</div>
+        ${featured.statPill ? `<div class="hero-stat-callout">${featured.statPill}</div>` : ''}
+      </div>
+    </div>
+    <div class="hero-stack">${sidesHtml}</div>`;
+}
+
+// ═══ FEED ═══
+function renderFeed() {
+  const nonFeatured = articles.filter(a => a.type !== 'featured');
+  const filtered = feedFilter === 'all' ? nonFeatured : nonFeatured.filter(a => a.category === feedFilter);
+  const el = document.getElementById('article-grid');
+  if (!el) return;
+
+  if (feedFilter === 'all') {
+    const stories = filtered.filter(a => a.type !== 'compile');
+    const compiles = filtered.filter(a => a.type === 'compile');
+    let html = '';
+    if (stories.length) {
+      html += `<div style="grid-column:1/-1;">${renderArticleCardWide(stories[0])}</div>`;
+      html += `<div style="grid-column:1/-1;display:flex;align-items:center;gap:10px;margin:2px 0;"><span style="font-size:10px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--text-muted);">Game Coverage</span><div style="flex:1;height:1px;background:var(--border-subtle);"></div></div>`;
+      html += stories.slice(1).map(renderArticleCard).join('');
+    }
+    if (compiles.length) {
+      html += `<div style="grid-column:1/-1;display:flex;align-items:center;gap:10px;margin:14px 0 2px;"><span style="font-size:10px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--text-muted);">Stat Compilations</span><div style="flex:1;height:1px;background:var(--border-subtle);"></div></div>`;
+      html += compiles.map(renderCompileCard).join('');
+    }
+    el.innerHTML = html;
+  } else {
+    el.innerHTML = filtered.map(a => a.type === 'compile' ? renderCompileCard(a) : renderArticleCard(a)).join('');
+  }
+}
+
+function artThumbStyle(a) {
+  const sc = a.logoAbbr ? schools[a.logoAbbr] : null;
+  if (sc && sc.logo) {
+    return `background:linear-gradient(to bottom,rgba(0,0,0,0.72) 0%,rgba(0,0,0,0.88) 100%),url(${sc.logo}) center/cover no-repeat;`;
+  }
+  const p = a.player ? getPlayer(a.player) : (a.players ? getPlayer(a.players[0]) : null);
+  const color = p ? p.schoolColor : '#4C1D95';
+  return `background:linear-gradient(145deg,${color}cc,${color}44,#111);`;
+}
+
+function renderArticleCard(a) {
+  const p = a.player ? getPlayer(a.player) : (a.players ? getPlayer(a.players[0]) : null);
+  const color = p ? p.schoolColor : '#4C1D95';
+  const school = p ? p.school : 'Courtside';
+  const sAbbr = a.logoAbbr || (p ? Object.keys(schools).find(k=>schools[k].name===school) : null);
+  const onclick = p ? `onclick="openProfile(${p.id})"` : '';
+  return `<div class="article-card" ${onclick}>
+    <div class="art-thumb" style="${artThumbStyle(a)}">
+      <div class="art-thumb-grad"></div>
+      <span class="art-tag">${a.tag}</span>
+    </div>
+    <div class="art-body">
+      <div class="art-meta-row">
+        ${sAbbr && schools[sAbbr] ? `<div style="width:22px;height:22px;border-radius:50%;overflow:hidden;flex-shrink:0;"><img src="${schools[sAbbr].logo}" style="width:100%;height:100%;object-fit:cover;"></div>` : hexDiv(color, schoolInits(school), 'sm')}
+        <span class="art-source">${school}</span>
+        <span class="art-time">${a.time||''}</span>
+      </div>
+      <div class="art-headline">${a.title}</div>
+      <div class="art-blurb">${a.blurb||''}</div>
+      <div class="art-footer">
+        ${a.statPill ? `<span class="stat-badge stat-badge-purple"><span class="num">${a.statPill}</span></span>` : ''}
+        <span class="art-views" style="margin-left:auto;"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> ${a.views||0}</span>
+      </div>
+    </div>
+  </div>`;
+}
+
+function renderArticleCardWide(a) {
+  const p = a.player ? getPlayer(a.player) : (a.players ? getPlayer(a.players[0]) : null);
+  const color = p ? p.schoolColor : '#4C1D95';
+  const school = p ? p.school : 'Courtside';
+  const sAbbr = a.logoAbbr || (p ? Object.keys(schools).find(k=>schools[k].name===school) : null);
+  const onclick = p ? `onclick="openProfile(${p.id})"` : '';
+  return `<div class="article-card" ${onclick} style="display:grid;grid-template-columns:200px 1fr;min-height:120px;">
+    <div class="art-thumb" style="${artThumbStyle(a)}height:auto;min-height:120px;">
+      <div class="art-thumb-grad"></div>
+      <span class="art-tag">${a.tag}</span>
+    </div>
+    <div class="art-body" style="display:flex;flex-direction:column;justify-content:center;padding:16px 18px;">
+      <div class="art-meta-row">
+        ${sAbbr && schools[sAbbr] ? `<div style="width:22px;height:22px;border-radius:50%;overflow:hidden;flex-shrink:0;"><img src="${schools[sAbbr].logo}" style="width:100%;height:100%;object-fit:cover;"></div>` : hexDiv(color, schoolInits(school), 'sm')}
+        <span class="art-source">${school}</span>
+        <span class="art-time">${a.time||''}</span>
+      </div>
+      <div class="art-headline" style="font-size:22px;">${a.title}</div>
+      <div class="art-blurb">${a.blurb||''}</div>
+      ${a.statPill ? `<div style="margin-top:8px;"><span class="stat-badge stat-badge-purple"><span class="num">${a.statPill}</span></span></div>` : ''}
+    </div>
+  </div>`;
+}
+
+function renderCompileCard(a) {
+  const p1 = getPlayer(a.players[0]), p2 = getPlayer(a.players[1]);
+  const c1 = p1 ? p1.schoolColor : '#4C1D95';
+  const c2 = p2 ? p2.schoolColor : '#6D28D9';
+  const bkd = a.breakdown ? a.breakdown.split('|') : [];
+  return `<div class="compile-card">
+    <div class="compile-body">
+      <div class="compile-header-row">
+        <div class="compile-shields">
+          ${hexDiv(c1, p1?p1.initials:'??','sm')}
+          <span class="compile-plus">+</span>
+          ${hexDiv(c2, p2?p2.initials:'??','sm')}
+        </div>
+        <div>
+          <div class="compile-title">${a.title}</div>
+          <div class="compile-ctx">${a.context||''}</div>
+        </div>
+        <span class="stat-badge stat-badge-purple" style="margin-left:auto;"><span class="num">${a.tag}</span></span>
+      </div>
+      <div class="compile-stat-block">
+        <div class="compile-big">${a.bigStat}</div>
+        <div class="compile-big-label">${a.bigStatLabel}</div>
+      </div>
+      <div class="compile-breakdown">${bkd.map(l=>`<div>${l.trim()}</div>`).join('')}</div>
+    </div>
+  </div>`;
+}
+
+function filterFeed(cat, el) {
+  feedFilter = cat;
+  document.querySelectorAll('.cat-tab').forEach(t => t.classList.remove('active'));
+  if (el) el.classList.add('active');
+  renderFeed();
+}
+
+// ═══ PLAYERS STRIP ═══
+function renderPlayersStrip() {
+  const top = [...players].sort((a,b)=>b.ppg-a.ppg).slice(0,4);
+  const el = document.getElementById('players-strip');
+  if (!el) return;
+  el.innerHTML = top.map(p => `
+    <div class="pstrip-card" onclick="openProfile(${p.id})">
+      ${hexDiv(p.schoolColor, p.initials, 'md')}
+      <div style="font-size:12px;font-weight:700;color:var(--text-primary);margin:6px 0 2px;">${p.name}</div>
+      <div style="font-size:10px;color:var(--text-secondary);margin-bottom:6px;">${p.position} · ${p.year}</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:26px;color:var(--purple-accent);line-height:1;">${p.ppg}</div>
+      <div style="font-size:10px;color:var(--text-muted);font-weight:600;letter-spacing:.04em;">PPG</div>
+    </div>`).join('');
+}
+
+// ═══ STANDINGS ═══
+function renderStandings() {
+  const el = document.getElementById('standings-list');
+  if (!el) return;
+  el.innerHTML = standings.map((s,i) => `
+    <div class="standing-row">
+      <span class="s-rank">${i+1}</span>
+      <div style="display:flex;align-items:center;gap:7px;">
+        ${schoolLogo(s.abbr,'sm')}
+        <span class="s-name">${s.abbr}</span>
+      </div>
+      <span class="s-num w">${s.w}</span>
+      <span class="s-num">${s.l}</span>
+      <span class="s-ppg">${s.ppg}</span>
+    </div>`).join('');
+}
+
+// ═══ LEADERS ═══
+const statKey = { pts:'ppg', reb:'rpg', ast:'apg', stl:'stl' };
+function renderLeaders(stat) {
+  leaderStat = stat;
+  const key = statKey[stat] || stat;
+  const top = [...players].sort((a,b) => (b[key]||0) - (a[key]||0)).slice(0,5);
+  const max = top[0][key] || 1;
+  const el = document.getElementById('leaders-list');
+  if (!el) return;
+  el.innerHTML = top.map((p,i) => `
+    <div class="leader-row">
+      <span class="l-rank">${i+1}</span>
+      <div class="l-info">
+        <div class="l-name">${p.name}</div>
+        <div class="l-school">${p.school}</div>
+      </div>
+      <div class="l-bar-wrap"><div class="l-bar" style="width:${((p[key]||0)/max*100)}%"></div></div>
+      <span class="l-val">${p[key]||0}</span>
+    </div>`).join('');
+}
+function switchLeaders(stat, el) {
+  document.querySelectorAll('.sw-btn').forEach(b => b.classList.remove('active'));
+  if (el) el.classList.add('active');
+  renderLeaders(stat);
+}
+
+// ═══ ALL PLAYERS ═══
+function renderAllPlayers() {
+  const el = document.getElementById('all-players-grid');
+  if (!el) return;
+  el.innerHTML = players.map(p => `
+    <div class="pstrip-card" onclick="openProfile(${p.id})">
+      ${hexDiv(p.schoolColor, p.initials, 'md')}
+      <div style="font-size:12px;font-weight:700;color:var(--text-primary);margin:6px 0 2px;">${p.name}</div>
+      <div style="font-size:10px;color:var(--text-secondary);margin-bottom:6px;">${p.position} · ${p.year} · ${p.height}</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:26px;color:var(--purple-accent);line-height:1;">${p.ppg}</div>
+      <div style="font-size:10px;color:var(--text-muted);font-weight:600;letter-spacing:.04em;">PPG</div>
+    </div>`).join('');
+}
+
+// ═══ RANKINGS ═══
+const rankKeys = { pts:'ppg', reb:'rpg', ast:'apg', stl:'stl', blk:'blk' };
+function renderRankings(stat) {
+  rankStat = stat;
+  const key = rankKeys[stat] || stat;
+  const sorted = [...players].sort((a,b) => (b[key]||0)-(a[key]||0));
+  const hdr = document.getElementById('rank-col-hdr');
+  if (hdr) hdr.textContent = stat.toUpperCase();
+  const tbody = document.getElementById('rank-tbody');
+  if (!tbody) return;
+  tbody.innerHTML = sorted.map((p,i) => `
+    <tr style="cursor:pointer;" onclick="openProfile(${p.id})">
+      <td><span class="rank-num">${i+1}</span></td>
+      <td>
+        <div style="display:flex;align-items:center;gap:10px;">
+          ${hexDiv(p.schoolColor, p.initials, 'sm')}
+          <div><div style="font-size:13px;font-weight:700;color:var(--text-primary);">${p.name}</div></div>
+        </div>
+      </td>
+      <td style="font-size:12px;">${p.school}</td>
+      <td style="font-size:12px;">${p.year}</td>
+      <td style="font-size:12px;">${p.position}</td>
+      <td><span class="rank-stat">${p[key]||0}</span></td>
+    </tr>`).join('');
+}
+function switchRankStat(stat, el) {
+  document.querySelectorAll('#tab-rankings .sw-btn').forEach(b => b.classList.remove('active'));
+  if (el) el.classList.add('active');
+  renderRankings(stat);
+}
+
+// ═══ DISCOVER ═══
+function renderDiscover() {
+  const el = document.getElementById('discover-grid');
+  if (!el) return;
+  el.innerHTML = discoverMoments.map(m => {
+    const p = getPlayer(m.player);
+    const color = p ? p.schoolColor : '#4C1D95';
+    return `<div class="disc-card" onclick="${p?`openProfile(${p.id})`:''}" >
+      <div class="disc-thumb" style="background:linear-gradient(135deg,${color}cc,${color}44,#111);">
+        ${p ? hexDiv(p.schoolColor, p.initials, 'lg') : ''}
+        <div style="position:absolute;top:8px;left:8px;font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:.08em;background:rgba(0,0,0,.5);color:var(--purple-accent);padding:2px 7px;border-radius:3px;">${m.type}</div>
+        ${m.featured ? `<div style="position:absolute;top:8px;right:8px;font-size:9px;font-weight:700;background:var(--purple-subtle);border:1px solid var(--purple-border);color:var(--purple-accent);padding:2px 6px;border-radius:3px;">FEATURED</div>` : ''}
+      </div>
+      <div class="disc-body">
+        <div style="font-size:13px;font-weight:700;color:var(--text-primary);margin-bottom:3px;">${m.label}</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:15px;color:var(--purple-accent);">${m.stat}</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-top:4px;">
+          <span style="font-size:11px;color:var(--text-secondary);">${m.context}</span>
+          <span style="font-size:11px;color:var(--text-muted);display:flex;align-items:center;gap:3px;"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>${m.views}</span>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ═══ PROFILE OVERLAY ═══
+function openProfile(id) {
+  const p = getPlayer(id);
+  if (!p) return;
+  const hdr = document.getElementById('profile-header');
+  hdr.style.background = `linear-gradient(145deg,${p.schoolColor}cc,${p.schoolColor}44,#111)`;
+  document.getElementById('profile-header-content').innerHTML = `
+    <div style="display:flex;align-items:center;gap:12px;">
+      ${hexDiv(p.schoolColor, p.initials, 'lg')}
+      <div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:30px;color:#fff;letter-spacing:.5px;line-height:1;">${p.name}</div>
+        <div style="font-size:12px;color:rgba(255,255,255,.6);margin-top:3px;">${p.position} · ${p.height} · ${p.year} · ${p.school}</div>
+      </div>
+    </div>`;
+  document.getElementById('profile-body').innerHTML = `
+    <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:16px;">
+      ${[['PPG',p.ppg],['RPG',p.rpg],['APG',p.apg],['STL',p.stl||p.stats.stl],['BLK',p.blk||p.stats.blk]].map(([lbl,val])=>`
+      <div style="background:var(--surface-3);border:1px solid var(--border-subtle);border-radius:6px;padding:10px;text-align:center;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--purple-accent);">${val}</div>
+        <div style="font-size:10px;font-weight:700;letter-spacing:.06em;color:var(--text-muted);">${lbl}</div>
+      </div>`).join('')}
+    </div>
+    <div style="font-size:12px;color:var(--text-secondary);line-height:1.6;margin-bottom:16px;padding:12px;background:var(--surface-3);border-radius:6px;">${p.scouting}</div>
+    <div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted);margin-bottom:10px;">Recent Games</div>
+    ${p.gamelog.slice(0,4).map(g=>`
+    <div style="display:grid;grid-template-columns:1fr repeat(6,auto);gap:8px;padding:8px 0;border-bottom:1px solid var(--border-subtle);align-items:center;">
+      <span style="font-size:12px;color:var(--text-secondary);">${g.opp}</span>
+      ${[['PTS',g.pts],['REB',g.reb],['AST',g.ast],['STL',g.stl],['BLK',g.blk],['TO',g.to]].map(([l,v])=>`<div style="text-align:center;"><div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--text-primary);">${v}</div><div style="font-size:9px;color:var(--text-muted);">${l}</div></div>`).join('')}
+    </div>`).join('')}`;
+  document.getElementById('profile-overlay').classList.add('active');
+}
+function closeProfile(e) {
+  if (e.target === document.getElementById('profile-overlay')) {
+    document.getElementById('profile-overlay').classList.remove('active');
+  }
+}
+
+// ═══ COUNT-UP ANIMATION ═══
+function countUp(el, target, duration=800) {
+  const isLarge = target > 1000;
+  let start = null;
+  const step = ts => {
+    if (!start) start = ts;
+    const progress = Math.min((ts - start) / duration, 1);
+    const ease = 1 - Math.pow(1 - progress, 3);
+    const val = Math.floor(ease * target);
+    el.textContent = isLarge ? (val/1000).toFixed(1)+'K' : val;
+    if (progress < 1) requestAnimationFrame(step);
+    else el.textContent = el.dataset.count > 1000 ? (target/1000).toFixed(1)+'K' : target;
+  };
+  requestAnimationFrame(step);
+}
+
+// ═══ RANKINGS TAB ═══
+function switchRankTab(mode, el) {
+  document.querySelectorAll('#tab-rankings .sw-btn').forEach(b => b.classList.remove('active'));
+  if (el) el.classList.add('active');
+  document.getElementById('rtab-teams').style.display = mode === 'teams' ? '' : 'none';
+  document.getElementById('rtab-players').style.display = mode === 'players' ? '' : 'none';
+  if (mode === 'teams') renderTeamsTable();
+  else renderRankings('pts');
+}
+function renderTeamsTable() {
+  const tbody = document.getElementById('teams-tbody');
+  if (!tbody) return;
+  tbody.innerHTML = standings.map((s, i) => {
+    const rank = i + 1;
+    const winPct = ((s.w / (s.w + s.l)) * 100).toFixed(1) + '%';
+    const diff = s.prev - rank;
+    const chg = diff > 0
+      ? `<span style="color:#22c55e;font-weight:700;">↑${diff}</span>`
+      : diff < 0
+        ? `<span style="color:#ef4444;font-weight:700;">↓${Math.abs(diff)}</span>`
+        : `<span style="color:var(--text-muted);">—</span>`;
+    const sc = schools[s.abbr];
+    const logoHtml = sc && sc.logo
+      ? `<div style="width:28px;height:28px;border-radius:50%;overflow:hidden;background:${s.color};border:1.5px solid rgba(255,255,255,0.15);flex-shrink:0;"><img src="${sc.logo}" alt="${s.abbr}" style="width:100%;height:100%;object-fit:cover;"></div>`
+      : `<div style="width:28px;height:28px;border-radius:50%;background:${s.color};display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:10px;color:#fff;flex-shrink:0;">${s.abbr}</div>`;
+    return `<tr>
+      <td><span class="rank-num">${rank}</span></td>
+      <td>
+        <div style="display:flex;align-items:center;gap:10px;">
+          ${logoHtml}
+          <div style="font-size:13px;font-weight:700;color:var(--text-primary);">${s.school}</div>
+        </div>
+      </td>
+      <td style="font-size:13px;font-weight:700;">${s.w}</td>
+      <td style="font-size:13px;color:var(--text-secondary);">${s.l}</td>
+      <td><span class="rank-stat" style="font-size:13px;">${winPct}</span></td>
+      <td style="font-size:13px;color:var(--purple-accent);font-weight:600;">${s.ppg}</td>
+      <td style="font-size:13px;color:var(--text-secondary);">${s.oppPpg}</td>
+      <td style="font-size:13px;">${chg}</td>
+    </tr>`;
+  }).join('');
+}
+
+// ═══ DISCOVER TAB ═══
+function switchDiscoverMode(mode, el) {
+  document.querySelectorAll('#tab-discover .sw-btn').forEach(b => b.classList.remove('active'));
+  if (el) el.classList.add('active');
+  document.getElementById('disc-teams').style.display = mode === 'teams' ? '' : 'none';
+  document.getElementById('disc-players').style.display = mode === 'players' ? '' : 'none';
+  if (mode === 'teams') renderDiscoverTeams();
+  else renderDiscoverPlayers();
+}
+function renderDiscoverTeams() {
+  const q = (document.getElementById('disc-team-search')?.value || '').toLowerCase();
+  const sort = document.getElementById('disc-team-sort')?.value || 'wins';
+  let list = standings.filter(s => s.school.toLowerCase().includes(q));
+  if (sort === 'wins') list = [...list].sort((a,b) => b.w - a.w);
+  else if (sort === 'ppg') list = [...list].sort((a,b) => b.ppg - a.ppg);
+  else list = [...list].sort((a,b) => a.school.localeCompare(b.school));
+  const grid = document.getElementById('disc-teams-grid');
+  if (!grid) return;
+  grid.innerHTML = list.map((s, i) => {
+    const rank = standings.findIndex(x => x.abbr === s.abbr) + 1;
+    const sc = schools[s.abbr];
+    const logoHtml = sc && sc.logo
+      ? `<div style="width:52px;height:52px;border-radius:50%;overflow:hidden;background:${s.color};border:2px solid rgba(255,255,255,0.12);flex-shrink:0;"><img src="${sc.logo}" alt="${s.abbr}" style="width:100%;height:100%;object-fit:cover;"></div>`
+      : `<div style="width:52px;height:52px;border-radius:50%;background:${s.color};display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:16px;color:#fff;flex-shrink:0;">${s.abbr}</div>`;
+    return `<div style="background:var(--surface-1);border:1px solid var(--border-subtle);border-radius:8px;padding:16px;display:flex;gap:12px;align-items:center;cursor:pointer;transition:border-color .15s;" onmouseenter="this.style.borderColor='var(--purple-border)'" onmouseleave="this.style.borderColor='var(--border-subtle)'">
+      ${logoHtml}
+      <div style="flex:1;min-width:0;">
+        <div style="font-size:13px;font-weight:700;color:var(--text-primary);margin-bottom:2px;">${s.school}</div>
+        <div style="font-size:11px;color:var(--text-muted);margin-bottom:8px;">${s.abbr} · #${rank} in Auckland Premier</div>
+        <div style="display:flex;gap:12px;">
+          <div><div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--purple-accent);line-height:1;">${s.w}–${s.l}</div><div style="font-size:9px;color:var(--text-muted);font-weight:600;letter-spacing:.04em;">W–L</div></div>
+          <div><div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--text-secondary);line-height:1;">${s.ppg}</div><div style="font-size:9px;color:var(--text-muted);font-weight:600;letter-spacing:.04em;">PPG</div></div>
+          <div><div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--text-secondary);line-height:1;">${s.oppPpg}</div><div style="font-size:9px;color:var(--text-muted);font-weight:600;letter-spacing:.04em;">OPP PPG</div></div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+function renderDiscoverPlayers() {
+  const q = (document.getElementById('disc-player-search')?.value || '').toLowerCase();
+  const pos = document.getElementById('disc-pos')?.value || '';
+  const yr = document.getElementById('disc-year')?.value || '';
+  const psort = document.getElementById('disc-psort')?.value || 'ppg';
+  let list = players.filter(p => {
+    const matchQ = p.name.toLowerCase().includes(q) || p.school.toLowerCase().includes(q);
+    const matchPos = !pos || p.position === pos;
+    const matchYr = !yr || p.year === yr;
+    return matchQ && matchPos && matchYr;
+  });
+  const sortKey = psort === 'rpg' ? 'rpg' : psort === 'apg' ? 'apg' : 'ppg';
+  list = [...list].sort((a,b) => (b[sortKey]||0) - (a[sortKey]||0));
+  const grid = document.getElementById('disc-players-grid');
+  if (!grid) return;
+  grid.innerHTML = list.map(p => {
+    const sc = Object.values(schools).find(s => s.name === p.school || s.abbr === p.school);
+    const logoHtml = sc && sc.logo
+      ? `<div style="width:44px;height:44px;border-radius:50%;overflow:hidden;background:${p.schoolColor};border:2px solid rgba(255,255,255,0.12);flex-shrink:0;"><img src="${sc.logo}" alt="${sc.abbr}" style="width:100%;height:100%;object-fit:cover;"></div>`
+      : hexDiv(p.schoolColor, p.initials, 'md');
+    return `<div style="background:var(--surface-1);border:1px solid var(--border-subtle);border-radius:8px;padding:14px;display:flex;gap:12px;align-items:center;cursor:pointer;transition:border-color .15s;" onclick="openProfile(${p.id})" onmouseenter="this.style.borderColor='var(--purple-border)'" onmouseleave="this.style.borderColor='var(--border-subtle)'">
+      ${logoHtml}
+      <div style="flex:1;min-width:0;">
+        <div style="font-size:13px;font-weight:700;color:var(--text-primary);margin-bottom:2px;">${p.name}</div>
+        <div style="font-size:11px;color:var(--text-muted);margin-bottom:8px;">${p.position} · ${p.year} · ${p.height} · ${p.school}</div>
+        <div style="display:flex;gap:10px;">
+          <div><div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--purple-accent);line-height:1;">${p.ppg}</div><div style="font-size:9px;color:var(--text-muted);font-weight:600;letter-spacing:.04em;">PPG</div></div>
+          <div><div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--text-secondary);line-height:1;">${p.rpg}</div><div style="font-size:9px;color:var(--text-muted);font-weight:600;letter-spacing:.04em;">RPG</div></div>
+          <div><div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--text-secondary);line-height:1;">${p.apg}</div><div style="font-size:9px;color:var(--text-muted);font-weight:600;letter-spacing:.04em;">APG</div></div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ═══ INIT ═══
+function init() {
+  renderTicker();
+  renderHero();
+  renderFeed();
+  renderPlayersStrip();
+  renderStandings();
+  renderLeaders('pts');
+  renderTeamsTable();
+  renderDiscoverTeams();
+  renderDiscoverPlayers();
+  // Handle ?tab= deep-link (e.g. from Scout "Film" pill)
+  const urlTab = new URLSearchParams(window.location.search).get('tab');
+  if (urlTab) switchTab(urlTab);
+}
+init();
+</script>
+</body>
+</html>
